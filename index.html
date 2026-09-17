@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IDRVN — Design, Spatial &amp; Research Studio, Nagpur</title>
+<meta name="description" content="IDRVN is a design, spatial, and research studio opening in Nagpur in 2027, carrying fifty years of applied arts heritage and a decade of European planning strategy into one studio.">
+<meta property="og:title" content="IDRVN — Design, Spatial &amp; Research Studio">
+<meta property="og:description" content="A studio drawn before it's built. Opening in Nagpur, 2027.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.idrvn.com/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="IDRVN — Design, Spatial &amp; Research Studio">
+<meta name="twitter:description" content="A studio drawn before it's built. Opening in Nagpur, 2027.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gloock&family=Manrope:wght@200;300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600&family=Rozha+One&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #08090f;
+    --ink2: #1c1e2c;
+    --lime: #c8ff00;
+    --white: #ffffff;
+    --offwhite: #f7f8f8;
+    --mid: #52546a;
+    --dim: #9496a8;
+    --coral: #ff3a1f;
+    --line-dark: rgba(148,150,168,0.22);
+    --line-light: rgba(82,84,106,0.16);
+    --font-display: 'Gloock', Georgia, 'Times New Roman', serif;
+    --font-body: 'Manrope', 'Segoe UI', Helvetica, Arial, sans-serif;
+    --font-deva: 'Noto Sans Devanagari', 'Nirmala UI', sans-serif;
+    --font-deva-display: 'Rozha One', 'Noto Sans Devanagari', serif;
+  }
+
+  /* Lumina White ink/lime is the studio's fixed identity, not a UI theme —
+     it stays constant regardless of the viewer's system preference. */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --ink: #08090f; --white: #ffffff; }
+  }
+  :root[data-theme="dark"] { --ink: #08090f; --white: #ffffff; }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--white);
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  em { font-style: italic; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 48px); }
+
+  .grid-bg {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      linear-gradient(var(--line-dark) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line-dark) 1px, transparent 1px);
+    background-size: 42px 42px;
+    opacity: 0.35;
+  }
+  main, header, footer { position: relative; z-index: 1; }
+
+  .eyebrow {
+    font-family: var(--font-body); font-weight: 600; font-size: 0.62rem;
+    letter-spacing: 0.2em; text-transform: uppercase; color: var(--lime);
+  }
+  section.schedule .eyebrow { color: var(--coral); }
+
+  /* ---------- status bar ---------- */
+  .statusbar {
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px;
+    font-family: var(--font-body); font-weight: 500; font-size: 0.68rem;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--dim);
+    padding: 10px clamp(20px, 5vw, 48px);
+    border-bottom: 1px solid var(--line-dark);
+  }
+
+  /* ---------- header ---------- */
+  header.site {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px clamp(20px, 5vw, 48px);
+  }
+  .wordmark { font-family: var(--font-display); font-weight: 400; font-size: 24px; letter-spacing: 0.01em; }
+  .wordmark-i { color: var(--lime); font-family: var(--font-deva-display); font-size: 1em; line-height: 1; display: inline-block; vertical-align: baseline; }
+  .wordmark-rest { font-size: 1em; line-height: 1; display: inline-block; vertical-align: baseline; }
+  .full-mark-wrap {
+    display: flex; flex-direction: column; align-items: center;
+    padding: clamp(50px, 8vw, 90px) 0 clamp(20px, 4vw, 40px);
+  }
+  .full-mark-svg { width: clamp(220px, 30vw, 360px); height: auto; display: none; }
+  .full-mark-svg.active { display: block; }
+  .full-mark-switch { display: inline-flex; border: 1px solid var(--line-dark); margin-bottom: 24px; }
+  .fm-btn {
+    font-family: var(--font-body); font-weight: 600; font-size: 0.64rem;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    background: none; border: none; color: var(--dim);
+    padding: 8px 16px; cursor: pointer; border-right: 1px solid var(--line-dark);
+    transition: color 0.2s ease, background 0.2s ease;
+  }
+  .fm-btn:last-child { border-right: none; }
+  .fm-btn.active { color: var(--ink); background: var(--lime); }
+  .fm-btn:not(.active):hover { color: var(--white); }
+  .full-mark-caption {
+    margin-top: 26px; font-family: var(--font-body); font-weight: 500;
+    font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim);
+  }
+  .header-loc { font-family: var(--font-body); font-weight: 500; font-size: 0.72rem; letter-spacing: 0.06em; color: var(--dim); text-transform: uppercase; }
+  .header-loc .to { color: var(--lime); padding: 0 6px; }
+
+  /* ---------- hero ---------- */
+  section.hero { padding: clamp(40px, 7vw, 90px) 0 clamp(70px, 9vw, 120px); }
+  .hero-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 40px; align-items: center; }
+  h1.hero-line {
+    font-family: var(--font-display); font-weight: 400;
+    font-size: clamp(34px, 4.8vw, 62px); line-height: 1.12; letter-spacing: -0.01em;
+    margin: 0 0 24px; max-width: 15ch;
+  }
+  .hero-sub { font-size: 17px; color: var(--dim); max-width: 46ch; margin: 0 0 32px; font-weight: 300; }
+  .cta {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--font-body); font-size: 0.85rem; font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--ink); background: var(--lime);
+    padding: 13px 24px; border: 1px solid var(--lime);
+    text-decoration: none; transition: background 0.2s ease, color 0.2s ease;
+  }
+  .cta:hover { background: transparent; color: var(--lime); }
+  .cta.ghost { background: transparent; color: var(--white); border-color: var(--lime); }
+  .cta.ghost:hover { background: var(--lime); color: var(--ink); }
+
+  .hero-object { position: relative; height: 320px; }
+  .compass { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+  .compass svg { width: 240px; height: 240px; }
+  #needle { transform-origin: 120px 120px; transition: transform 0.15s ease-out; }
+  .stamp {
+    position: absolute; top: 6px; right: 6px;
+    font-family: var(--font-body); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--coral); border: 2px solid var(--coral);
+    padding: 8px 12px; transform: rotate(8deg);
+    text-align: center; line-height: 1.5;
+  }
+
+  /* ---------- word mark reveal ---------- */
+  section.wordmark-detail { padding-top: clamp(30px, 5vw, 50px); }
+  #introMark {
+    position: relative;
+    height: 1.3em;
+    font-family: var(--font-display); font-weight: 400;
+    font-size: clamp(34px, 6vw, 64px);
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+  #introMark .letter { display: inline-block; will-change: transform; transition: transform 1.15s cubic-bezier(.2,.8,.2,1); }
+  #introMark .letter.i-letter { color: var(--lime); }
+  #introMark .letter.e-letter { transition: transform 1.15s cubic-bezier(.2,.8,.2,1), opacity 0.6s ease; }
+  #introMark .letter.e-vanish { opacity: 0; transform: translateY(-0.18em) scale(0.6) !important; }
+
+  #typeRow {
+    margin-top: 22px;
+    font-family: var(--font-display); font-weight: 400;
+    font-size: clamp(24px, 4.2vw, 42px);
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+  }
+  #typeRow.show { opacity: 1; transform: translateY(0); }
+  #typeRow .i-fixed { color: var(--lime); }
+  #typeRow .typed { color: var(--white); }
+  #typeRow .cursor {
+    display: inline-block; width: 0.05em; height: 0.82em;
+    background: var(--lime); margin-left: 0.02em;
+    vertical-align: -0.04em;
+    animation: blink 1s steps(1) infinite;
+  }
+  #typeRow .suffix { color: var(--dim); }
+  @keyframes blink { 50% { opacity: 0; } }
+  .wordmark-caption {
+    margin-top: 30px; font-size: 0.95rem; color: var(--dim); font-weight: 300;
+    max-width: 46ch;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #introMark .letter, #typeRow { transition: none !important; }
+    #typeRow .cursor { animation: none !important; opacity: 0; }
+  }
+
+  /* ---------- section shell ---------- */
+  section { padding: clamp(50px, 7vw, 90px) 0; }
+  .rule-top { border-top: 1px solid var(--line-dark); }
+  .section-head { display: grid; grid-template-columns: 200px 1fr; gap: 32px; margin-bottom: 40px; }
+  .section-head h2 {
+    font-family: var(--font-display); font-weight: 400;
+    font-size: clamp(24px, 2.6vw, 32px); margin: 0; line-height: 1.2;
+  }
+  .section-head p { max-width: 58ch; color: var(--dim); margin: 0; font-weight: 300; }
+
+  /* ---------- legacy note ---------- */
+  .legacy-grid { display: grid; grid-template-columns: 200px 1fr; gap: 32px; }
+  .legacy-copy p { font-size: 18px; line-height: 1.8; max-width: 62ch; margin: 0 0 20px; color: var(--white); font-weight: 300; }
+  .legacy-copy strong { font-weight: 600; color: var(--lime); }
+
+  /* ---------- sheet index (pillars) ---------- */
+  .sheet-index { border-top: 1px solid var(--line-dark); }
+  .sheet-row { border-bottom: 1px solid var(--line-dark); }
+  .sheet-row summary {
+    list-style: none; cursor: pointer;
+    display: grid; grid-template-columns: 90px 1fr 20px; align-items: center;
+    gap: 20px; padding: 20px 0;
+  }
+  .sheet-row summary::-webkit-details-marker { display: none; }
+  .sheet-num { font-family: var(--font-body); font-weight: 600; letter-spacing: 0.04em; color: var(--lime); font-size: 0.8rem; }
+  .sheet-row h3 { font-family: var(--font-display); font-weight: 400; font-size: 19px; margin: 0; }
+  .sheet-plus { font-family: var(--font-body); color: var(--dim); font-size: 18px; transition: transform 0.2s ease; }
+  .sheet-row[open] .sheet-plus { transform: rotate(45deg); color: var(--lime); }
+  .sheet-body { padding: 0 0 22px 110px; color: var(--dim); max-width: 58ch; font-weight: 300; }
+
+  /* ---------- schedule (segments) — paper panel ---------- */
+  section.schedule { background: var(--white); color: var(--ink); }
+  table.schedule-table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  table.schedule-table th {
+    font-family: var(--font-body); font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase;
+    text-align: left; color: var(--mid); font-weight: 600; padding: 0 16px 12px 0;
+    border-bottom: 1px solid var(--line-light);
+  }
+  table.schedule-table td { padding: 16px 16px 16px 0; border-bottom: 1px solid var(--line-light); vertical-align: top; color: var(--mid); font-weight: 300; }
+  table.schedule-table td.who { font-family: var(--font-display); font-weight: 400; font-size: 16px; color: var(--ink); width: 260px; }
+
+  /* ---------- while it cooks: sketch pad ---------- */
+  .cook-head { text-align: center; margin-bottom: 30px; }
+  .cook-head h2 {
+    font-family: var(--font-display); font-weight: 400;
+    font-size: clamp(22px, 3vw, 32px); margin: 0 0 10px;
+  }
+  .cook-head p { color: var(--dim); margin: 0; font-weight: 300; }
+  .sketch-wrap {
+    position: relative;
+    background: var(--offwhite);
+    padding: 18px;
+    max-width: 620px;
+    margin: 0 auto;
+    background-image:
+      linear-gradient(var(--line-light) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line-light) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .sketch-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
+  .pens { display: flex; gap: 8px; }
+  .pen { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--ink); cursor: pointer; padding: 0; }
+  .pen[data-pen="ink"] { background: var(--ink); }
+  .pen[data-pen="lime"] { background: var(--lime); }
+  .pen[data-pen="coral"] { background: var(--coral); }
+  .pen.active { outline: 2px solid var(--coral); outline-offset: 2px; }
+  .sketch-btn {
+    font-family: var(--font-body); font-weight: 600; font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase;
+    background: none; border: 1px solid var(--ink); color: var(--ink);
+    padding: 7px 12px; cursor: pointer;
+  }
+  .sketch-btn:hover { background: var(--ink); color: var(--offwhite); }
+  .sketch-btn.active { background: var(--ink); color: var(--offwhite); }
+  .sketch-btns { display: flex; gap: 8px; }
+
+  .glyph-frame { position: relative; }
+  .glyph-guide {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-deva-display); font-weight: 400;
+    font-size: 210px; line-height: 1;
+    color: var(--ink);
+    opacity: 0.16;
+    pointer-events: none; user-select: none;
+    transition: opacity 0.2s ease;
+    z-index: 0;
+  }
+  .glyph-guide.hidden { opacity: 0; }
+  #padCanvas { position: relative; z-index: 1; width: 100%; height: 320px; display: block; touch-action: none; cursor: crosshair; }
+
+  .glyph-tick { position: absolute; width: 14px; height: 14px; border: 1px solid var(--coral); opacity: 0.6; z-index: 2; }
+  .glyph-tick.tl { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+  .glyph-tick.tr { top: -1px; right: -1px; border-left: none; border-bottom: none; }
+  .glyph-tick.bl { bottom: -1px; left: -1px; border-right: none; border-top: none; }
+  .glyph-tick.br { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+  .glyph-caption {
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px;
+    font-family: var(--font-body); font-weight: 600; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--mid); margin-top: 10px;
+  }
+  .glyph-caption .coral { color: var(--coral); }
+  .cook-caption { text-align: center; font-family: var(--font-body); font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--dim); margin-top: 14px; }
+
+  /* ---------- contact / title block ---------- */
+  .contact-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: start; }
+  .contact h2 {
+    font-family: var(--font-display); font-weight: 400;
+    font-size: clamp(26px, 3.2vw, 38px); line-height: 1.25; margin: 0 0 18px; max-width: 16ch;
+  }
+  .contact p { color: var(--dim); max-width: 48ch; margin: 0 0 26px; font-weight: 300; }
+
+  .titleblock { border: 1px solid var(--line-dark); font-family: var(--font-body); font-size: 0.85rem; }
+  .tb-row { display: grid; grid-template-columns: 100px 1fr; border-bottom: 1px solid var(--line-dark); }
+  .tb-row:last-child { border-bottom: none; }
+  .tb-row span:first-child {
+    padding: 10px 12px; color: var(--coral); font-weight: 600; font-size: 0.62rem;
+    letter-spacing: 0.1em; text-transform: uppercase; border-right: 1px solid var(--line-dark);
+  }
+  .tb-row span:last-child { padding: 10px 12px; color: var(--white); font-weight: 300; }
+
+  /* ---------- footer ---------- */
+  footer.legal { padding: 30px clamp(20px, 5vw, 48px) 40px; border-top: 1px solid var(--line-dark); }
+  .legal-notice { font-family: var(--font-body); font-weight: 300; font-size: 0.78rem; line-height: 1.8; color: var(--dim); max-width: 82ch; margin: 0 0 16px; }
+  .legal-bottom { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-family: var(--font-body); font-weight: 500; font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--dim); }
+  .legal-bottom .coral-dot { color: var(--coral); }
+
+  @media (max-width: 860px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-object { height: 220px; }
+    .section-head, .legacy-grid { grid-template-columns: 1fr; gap: 14px; }
+    .sheet-body { padding-left: 0; }
+    .contact-grid { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  :focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; }
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<div class="statusbar">
+  <span>IDRVN / SHEET A-000 / COVER</span>
+  <span>REV 03 — FOUNDATION PHASE</span>
+</div>
+
+<header class="site">
+  <div class="wordmark"><span class="wordmark-i">इ</span><span class="wordmark-rest">drvn</span></div>
+  <div class="header-loc">Telgte, Germany <span class="to">→</span> Nagpur, India</div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <h1 class="hero-line">A studio drawn before it's built.</h1>
+      <p class="hero-sub">IDRVN is a design, spatial, and research practice opening in Nagpur in 2027, carrying fifty years of applied arts heritage and a decade of European planning strategy into one studio.</p>
+      <a class="cta" href="#contact">Start a conversation</a>
+    </div>
+    <div class="hero-object">
+      <div class="stamp">DRAFT<br>NOT FOR<br>CONSTRUCTION</div>
+      <div class="compass" id="compassWrap">
+        <svg viewBox="0 0 240 240" fill="none">
+          <circle cx="120" cy="120" r="100" stroke="var(--dim)" stroke-width="1"/>
+          <circle cx="120" cy="120" r="60" stroke="var(--line-dark)" stroke-width="1"/>
+          <line x1="120" y1="14" x2="120" y2="34" stroke="var(--dim)" stroke-width="1"/>
+          <line x1="120" y1="206" x2="120" y2="226" stroke="var(--dim)" stroke-width="1"/>
+          <line x1="14" y1="120" x2="34" y2="120" stroke="var(--dim)" stroke-width="1"/>
+          <line x1="206" y1="120" x2="226" y2="120" stroke="var(--dim)" stroke-width="1"/>
+          <g id="needle">
+            <line x1="120" y1="120" x2="120" y2="42" stroke="var(--lime)" stroke-width="2"/>
+            <line x1="120" y1="120" x2="120" y2="198" stroke="var(--dim)" stroke-width="1.5"/>
+          </g>
+          <circle cx="120" cy="120" r="4" fill="var(--lime)"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="rule-top wordmark-detail">
+  <div class="wrap">
+    <div class="eyebrow" style="color: var(--coral);">Detail A-001 · Word Mark</div>
+    <div id="introMark">
+      <span class="letter" data-letter="D">D</span>
+      <span class="letter" data-letter="R">R</span>
+      <span class="letter i-letter" data-letter="I">I</span>
+      <span class="letter" data-letter="V">V</span>
+      <span class="letter e-letter" data-letter="E">E</span>
+      <span class="letter" data-letter="N">N</span>
+    </div>
+    <div id="typeRow">
+      <span class="i-fixed">I</span><span class="typed" id="typedText"></span><span class="cursor"></span><span class="suffix">-Driven</span>
+    </div>
+    <p class="wordmark-caption">IDRVN is driven, spelled to mean more.</p>
+    <div class="full-mark-wrap">
+      <div class="full-mark-switch" id="fullMarkSwitch">
+        <button class="fm-btn active" data-fm="hi">Hindi</button>
+        <button class="fm-btn" data-fm="en">English</button>
+      </div>
+      <svg class="full-mark-svg fm-hi active" viewBox="0 0 1350 1350" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fmHiTitle">
+<title id="fmHiTitle">IDRVN full logomark, Hindi: इड्रिवन</title>
+<path d="M649.258 395C657.675 397.902 664.786 402.981 670.59 410.237C676.685 417.492 679.733 427.36 679.733 439.839C679.733 452.319 675.524 462.767 667.108 471.183C658.691 479.309 645.34 483.372 627.055 483.372C608.771 483.372 580.182 478.874 541.291 469.877C502.69 460.59 477.294 455.946 465.105 455.946C445.369 455.946 435.501 463.637 435.501 479.019C435.501 490.047 439.709 498.464 448.126 504.268C456.833 510.073 466.556 512.975 477.294 512.975H533.019V521.681H489.484V756.76H428.535V521.681H385V512.975H442.466C425.633 503.978 417.216 488.886 417.216 467.7C417.216 452.028 422.585 439.259 433.324 429.391C444.063 419.233 458.139 414.155 475.553 414.155C493.257 414.155 519.669 418.508 554.787 427.215C589.905 435.921 618.348 440.274 640.116 440.274C655.788 440.274 663.625 434.905 663.625 424.167C663.625 414.3 657.82 407.334 646.211 403.271L649.258 395Z" fill="#F5F5F5"/>
+<path d="M684.437 521.681V581.322C666.442 572.615 644.965 568.262 620.005 568.262C607.525 568.262 598.237 570.293 592.142 574.356C586.047 578.129 583 582.918 583 588.722C583 594.527 587.208 599.751 595.625 604.394C604.332 609.038 614.78 613.246 626.97 617.019C639.16 620.502 651.35 624.71 663.54 629.644C676.02 634.577 686.468 641.978 694.885 651.845C703.592 661.713 707.946 674.483 707.946 690.155C707.946 705.536 701.996 719.322 690.096 731.511C678.487 743.41 662.669 751.391 642.643 755.454L707.946 800.729L702.286 809L629.582 758.937L559.926 807.259L554.267 798.987L612.168 758.066C591.562 757.486 574.002 752.697 559.491 743.7C544.979 734.413 537.723 722.369 537.723 707.568C537.723 699.151 540.335 692.041 545.56 686.237C550.784 680.142 557.749 677.095 566.456 677.095C575.454 677.095 582.564 679.562 587.789 684.495C593.013 689.139 595.625 694.943 595.625 701.909C595.625 708.874 592.432 714.823 586.047 719.757C579.952 724.691 576.905 728.609 576.905 731.511C576.905 737.315 580.823 741.669 588.659 744.571C596.786 747.473 606.799 748.924 618.699 748.924C630.888 748.924 641.047 745.442 649.173 738.476C657.59 731.511 661.798 722.514 661.798 711.486C661.798 700.457 657.735 691.606 649.608 684.931C641.482 677.965 631.469 672.741 619.569 669.259C607.96 665.486 596.205 661.713 584.306 657.94C572.696 654.167 562.828 648.508 554.702 640.962C546.575 633.126 542.512 622.388 542.512 608.748C542.512 594.817 549.623 583.208 563.844 573.921C578.066 564.344 597.947 559.555 623.487 559.555V521.681H515.52V512.975H731.89V521.681H684.437Z" fill="#F5F5F5"/>
+<path d="M977.441 512.975V521.681H933.906V756.76H873.393V695.814C869.039 703.94 861.348 710.905 850.319 716.71C839.58 722.514 827.826 725.416 815.056 725.416C793.578 725.416 775.439 718.451 760.637 704.521C745.835 690.59 738.434 669.984 738.434 642.703C738.434 615.132 745.69 594.237 760.201 580.016C775.003 565.505 793.143 558.249 814.62 558.249C830.583 558.249 843.498 562.893 853.366 572.18L848.578 577.839C844.224 575.227 839.87 573.921 835.517 573.921C826.229 573.921 818.538 579.726 812.443 591.334C806.639 602.653 803.736 618.18 803.736 637.915C803.736 681.158 816.507 702.779 842.047 702.779C850.174 702.779 857.139 699.587 862.944 693.202C869.039 686.527 872.522 679.707 873.393 672.741V521.681H714.489V512.975H977.441Z" fill="#F5F5F5"/>
+<path d="M1184 512.975L1221 521.681H1177.46V756.76H1116.52V596.123C1095.62 595.543 1081.4 595.252 1073.85 595.252C1066.6 595.252 1060.5 595.543 1055.57 596.123C1050.92 596.413 1045.26 597.139 1038.59 598.3C1031.91 599.461 1026.4 601.637 1022.04 604.83C1017.98 607.732 1015.95 611.069 1015.95 614.842C1015.95 618.615 1018.42 621.517 1023.35 623.549C1028.57 625.29 1034.23 626.741 1040.33 627.902C1046.42 629.063 1051.94 632.401 1056.87 637.915C1062.1 643.429 1064.71 651.265 1064.71 661.423C1064.71 671.29 1061.23 679.416 1054.26 685.801C1047.29 692.186 1037.86 695.379 1025.96 695.379C1014.35 695.379 1004.49 691.17 996.359 682.754C988.232 674.338 984.169 663.019 984.169 648.798C984.169 626.451 992.15 610.489 1008.11 600.912C1024.37 591.334 1044.54 586.546 1068.63 586.546H1116.52V521.681H960.225V512.975H1184Z" fill="#F5F5F5"/>
+<path d="M193 512H1189L1221 522H193C193 522 186.5 513.5 187 513C187.5 512.5 193 512 193 512Z" fill="#C8FF00"/>
+<path d="M268.347 546.951H209.181C195.57 546.756 190.442 546.965 185.708 545.051C180.975 543.138 181.414 544.368 172.796 536.706C168.542 532.924 165.617 530.387 161.512 526.922C159.893 525.559 157.318 523.184 155.785 521.647C154.404 520.497 153.882 518.407 153.882 517.362C153.882 516.318 154.011 515.112 155.052 514.356C156.666 513.183 159.099 512.661 162.689 512.506C162.689 512.506 348.891 512.003 351.931 512.173H406C406 512.173 381.002 533.578 364.984 547.293C375.497 547.482 349.271 547.343 364.984 547.293C360.269 547.16 342.91 546.951 342.91 546.951C339.099 546.951 337.101 548.187 336.879 550.413C336.763 551.571 336.716 559.051 336.706 569.385C336.703 577.625 336.57 586.213 336.415 588.467C335.756 598.052 332.472 603.628 325.5 607.006C320.247 609.549 313.616 610.822 297.869 612.309C288.558 613.188 277.253 614.433 272.377 615.116C261.199 616.678 250.055 619.749 243.39 623.102C234.233 627.707 227.714 635.171 225.095 644.045C223.718 648.717 223.746 656.148 225.151 659.526C225.665 660.759 227.494 661.832 229.086 661.832C231.082 661.832 234.772 660.634 244.161 656.927C263.675 649.227 271.232 647.038 283.465 645.538C293.613 644.296 306.75 645.597 316.068 648.764C327.933 652.8 339.396 660.125 350.157 670.545C357.36 677.521 363.297 684.691 366.891 690.752C368.801 693.974 371.823 700.877 372.621 703.848C374.909 712.356 374.581 722.344 371.736 730.653C367.096 744.205 355.004 758.019 337.802 769.414C326.807 776.698 311.731 783.485 298.798 786.975C297.436 787.341 296.216 787.742 296.086 787.863C295.956 787.984 298.166 790.801 301.002 794.12L312.381 807.44C319.399 815.646 321.315 817.9 325.729 823.157C337.706 837.414 341.288 841.438 349.596 849.958C352.176 852.603 351.533 851.935 356.84 857.152C357.971 858.389 367.331 865.862 370.965 868.557C389.727 882.476 407.96 889.567 430.245 891.616C435.418 892.095 448.206 891.827 452.338 891.157C461.563 889.663 468.934 886.844 476.174 882.041C479.66 879.731 485.721 873.897 488.331 870.338C491.77 865.647 494.655 858.776 495.698 852.784C496.113 850.418 496.19 848.306 496.101 842.109C495.986 834.384 495.986 834.384 499.419 836.11C512.99 842.931 522.574 854.24 526.224 867.74C526.846 870.044 526.923 871.056 526.929 877.002C526.936 882.997 526.861 883.978 526.202 886.627C522.918 899.854 514.16 910.171 500.629 916.757C484.805 924.46 465.721 925.857 443.516 920.936C419.965 915.72 398.841 904.815 373.002 884.537C363.062 876.738 357.756 872.294 348.148 863.719C346.615 862.586 327.423 844.938 322.779 840.329C318.662 836.244 311.963 829.059 303.429 819.574C297.526 813.013 292.693 807.961 284.19 799.457L276.974 792.238C276.284 791.316 275.572 791.282 270.956 791.465C259.893 791.899 244.892 790.468 235.001 788.034C227.467 786.178 219.056 783.057 213.267 779.967C209.621 778.024 203.228 773.686 200.603 771.379C189.753 761.838 183.522 748.884 184.71 738.349C185.373 732.497 187.014 728.988 190.877 725.172C193.914 722.173 196.204 720.872 200.269 719.841C203.767 718.954 210.419 719.161 214.753 720.295C223.142 722.487 232.627 727.302 239.363 732.783C241.709 734.689 252.138 744.438 255.608 747.965C258.233 750.632 258.233 750.632 260.561 750.629C267.96 750.62 277.748 749.027 284.691 746.702C298.922 741.936 315.793 730.733 325.488 719.612C328.249 716.442 331.534 712.057 333.106 709.44C337.158 702.696 339.87 694.111 339.873 688.028C339.876 683.707 338.4 681.586 334.645 680.524C332.196 679.832 322.572 679.866 317.22 680.586C306.62 682.017 297.854 684.206 283.63 688.982C270.387 693.428 265.579 694.499 258.983 694.483C249.163 694.462 244.102 692.14 228.643 680.564C208.757 665.67 197.3 653.561 191.084 640.874C187.837 634.249 186.744 629.511 186.964 623.021C187.088 619.339 187.227 618.473 188.103 615.88C192.375 603.237 204.268 592.665 221.102 586.545C233.218 582.139 245.124 580.189 275.117 577.699C290.443 576.427 295.142 575.135 297.03 571.676C297.498 570.816 297.572 569.338 297.659 558.828L297.761 546.951H268.347Z" fill="#C8FF00"/>
+</svg>
+      <svg class="full-mark-svg fm-en" viewBox="0 0 1350 1350" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fmEnTitle">
+<title id="fmEnTitle">IDRVN full logomark, English: IDRVN Driven</title>
+<path d="M189.541 512H623L654 522H189.541C189.541 522 186.801 513.5 187.012 513C187.222 512.5 189.541 512 189.541 512Z" fill="#CBF901"/>
+<path d="M540.799 800.522L540.446 750.476C534.807 762.694 526.349 772.797 515.071 780.786C503.793 788.539 491.693 792.416 478.77 792.416C466.082 792.416 454.687 788.422 444.584 780.433C434.481 772.445 426.492 761.519 420.618 747.657C414.744 733.559 411.807 717.7 411.807 700.078C411.807 680.341 415.449 663.19 422.733 648.622C430.251 634.055 440.589 622.894 453.747 615.141C466.905 607.152 482.059 603.158 499.211 603.158C508.845 603.158 516.716 604.685 522.825 607.74C528.933 610.559 534.455 615.493 539.389 622.542V471.112C539.389 462.653 536.687 455.84 531.283 450.671C526.114 445.501 519.3 442.917 510.842 442.917V439.393H546.79C558.538 439.393 567.466 438.218 573.575 435.868C579.684 433.519 584.031 430.229 586.615 426H590.14V755.41C590.14 763.869 592.724 770.683 597.893 775.852C603.062 781.021 609.994 783.605 618.687 783.605V787.13H582.739C572.401 787.13 564.177 788.187 558.068 790.302C552.194 792.416 547.613 795.823 544.323 800.522H540.799ZM498.154 778.319C503.558 778.319 508.962 776.674 514.366 773.385C520.005 769.86 525.057 765.279 529.521 759.64C533.985 754.001 537.274 748.009 539.389 741.665V655.671C538.214 641.573 534.69 630.295 528.816 621.837C523.177 613.379 515.776 609.149 506.612 609.149C494.395 609.149 484.879 616.903 478.065 632.41C471.486 647.917 468.197 670.826 468.197 701.135C468.197 752.591 478.183 778.319 498.154 778.319Z" fill="#F5F5F5"/>
+<path d="M614.976 787.13V783.605H615.328C623.786 783.605 630.6 781.021 635.769 775.852C640.938 770.683 643.523 763.869 643.523 755.41V639.811C643.523 630.883 641.643 623.952 637.884 619.018C634.36 614.083 626.723 611.616 614.976 611.616V608.092H649.867C662.319 608.092 671.718 606.917 678.062 604.568C684.405 601.983 688.87 598.694 691.454 594.699H693.216L693.569 652.499C696.623 645.45 700.5 638.049 705.199 630.295C710.133 622.542 716.242 616.081 723.526 610.912C731.045 605.508 739.973 602.805 750.311 602.805C753.835 602.805 757.595 603.158 761.589 603.863C765.583 604.568 769.813 605.86 774.277 607.74L760.532 648.975C752.073 644.275 744.672 640.986 738.328 639.106C732.219 637.227 726.815 636.287 722.116 636.287C714.128 636.287 708.136 638.754 704.142 643.688C700.383 648.622 697.093 654.496 694.274 661.31V755.41C694.274 763.869 696.858 770.683 702.027 775.852C707.196 781.021 714.01 783.605 722.469 783.605H722.821V787.13H614.976Z" fill="#F5F5F5"/>
+<path d="M853.266 792.769L783.132 630.648C780.782 625.244 777.61 620.78 773.616 617.255C769.857 613.731 764.57 611.851 757.756 611.616V608.092H856.438V611.616C848.215 612.556 842.811 616.198 840.226 622.542C837.877 628.886 838.699 636.874 842.693 646.508L878.994 731.445L914.943 648.622C917.292 643.218 918.467 637.932 918.467 632.763C918.467 626.889 916.705 622.072 913.181 618.313C909.656 614.553 904.722 612.321 898.378 611.616V608.092H954.063V611.616C947.954 613.026 942.08 616.55 936.441 622.189C930.802 627.828 925.751 635.582 921.287 645.45L856.438 792.769H853.266Z" fill="#F5F5F5"/>
+<path d="M941.943 787.13V783.605H942.295C950.754 783.605 957.567 781.021 962.736 775.852C967.906 770.683 970.49 763.869 970.49 755.41V639.811C970.49 630.883 968.61 623.952 964.851 619.018C961.327 614.083 953.691 611.616 941.943 611.616V608.092H976.834C988.817 608.092 997.98 606.8 1004.32 604.215C1010.2 601.631 1014.31 598.459 1016.66 594.699H1020.18L1020.54 644.041C1026.64 631.823 1035.93 621.955 1048.38 614.436C1060.83 606.917 1073.99 603.158 1087.85 603.158C1103.59 603.158 1116.16 608.327 1125.56 618.665C1135.2 629.003 1140.01 642.631 1140.01 659.548V755.41C1140.01 763.869 1142.6 770.683 1147.77 775.852C1152.93 781.021 1159.75 783.605 1168.21 783.605H1168.56V787.13H1061.07V783.605H1061.42C1069.88 783.605 1076.69 781.021 1081.86 775.852C1087.03 770.683 1089.61 763.869 1089.61 755.41V656.023C1089.61 644.275 1087.26 634.877 1082.56 627.828C1078.1 620.78 1072.11 617.255 1064.59 617.255C1057.31 617.255 1049.67 620.427 1041.68 626.771C1033.93 632.88 1027.11 641.221 1021.24 651.794V755.41C1021.24 763.869 1023.83 770.683 1028.99 775.852C1034.16 781.021 1040.98 783.605 1049.44 783.605H1049.79V787.13H941.943Z" fill="#F5F5F5"/>
+<path d="M268.347 546.951H209.181C195.57 546.756 190.442 546.965 185.708 545.051C180.975 543.138 181.414 544.368 172.796 536.706C168.542 532.924 165.617 530.387 161.512 526.922C159.893 525.559 157.318 523.184 155.785 521.647C154.404 520.497 153.882 518.407 153.882 517.362C153.882 516.318 154.011 515.112 155.052 514.356C156.666 513.183 159.099 512.661 162.689 512.506C162.689 512.506 348.891 512.003 351.931 512.173H406C406 512.173 381.002 533.578 364.984 547.293C375.497 547.482 349.271 547.343 364.984 547.293C360.269 547.16 342.91 546.951 342.91 546.951C339.099 546.951 337.101 548.187 336.879 550.413C336.763 551.571 336.716 559.051 336.706 569.385C336.703 577.625 336.57 586.213 336.415 588.467C335.756 598.052 332.472 603.628 325.5 607.006C320.247 609.549 313.616 610.822 297.869 612.309C288.558 613.188 277.253 614.433 272.377 615.116C261.199 616.678 250.055 619.749 243.39 623.102C234.233 627.707 227.714 635.171 225.095 644.045C223.718 648.717 223.746 656.148 225.151 659.526C225.665 660.759 227.494 661.832 229.086 661.832C231.082 661.832 234.772 660.634 244.161 656.927C263.675 649.227 271.232 647.038 283.465 645.538C293.613 644.296 306.75 645.597 316.068 648.764C327.933 652.8 339.396 660.125 350.157 670.545C357.36 677.521 363.297 684.691 366.891 690.752C368.801 693.974 371.823 700.877 372.621 703.848C374.909 712.356 374.581 722.344 371.736 730.653C367.096 744.205 355.004 758.019 337.802 769.414C326.807 776.698 311.731 783.485 298.798 786.975C297.436 787.341 296.216 787.742 296.086 787.863C295.956 787.984 298.166 790.801 301.002 794.12L312.381 807.44C319.399 815.646 321.315 817.9 325.729 823.157C337.706 837.414 341.288 841.438 349.596 849.958C352.176 852.603 351.533 851.935 356.84 857.152C357.971 858.389 367.331 865.862 370.965 868.557C389.727 882.476 407.96 889.567 430.245 891.616C435.418 892.095 448.206 891.827 452.338 891.157C461.563 889.663 468.934 886.844 476.174 882.041C479.66 879.731 485.721 873.897 488.331 870.338C491.77 865.647 494.655 858.776 495.698 852.784C496.113 850.418 496.19 848.306 496.101 842.109C495.986 834.384 495.986 834.384 499.419 836.11C512.99 842.931 522.574 854.24 526.224 867.74C526.846 870.044 526.923 871.056 526.929 877.002C526.936 882.997 526.861 883.978 526.202 886.627C522.918 899.854 514.16 910.171 500.629 916.757C484.805 924.46 465.721 925.857 443.516 920.936C419.965 915.72 398.841 904.815 373.002 884.537C363.062 876.738 357.756 872.294 348.148 863.719C346.615 862.586 327.423 844.938 322.779 840.329C318.662 836.244 311.963 829.059 303.429 819.574C297.526 813.013 292.693 807.961 284.19 799.457L276.974 792.238C276.284 791.316 275.572 791.282 270.956 791.465C259.893 791.899 244.892 790.468 235.001 788.034C227.467 786.178 219.056 783.057 213.267 779.967C209.621 778.024 203.228 773.686 200.603 771.379C189.753 761.838 183.522 748.884 184.71 738.349C185.373 732.497 187.014 728.988 190.877 725.172C193.914 722.173 196.204 720.872 200.269 719.841C203.767 718.954 210.419 719.161 214.753 720.295C223.142 722.487 232.627 727.302 239.363 732.783C241.709 734.689 252.138 744.438 255.608 747.965C258.233 750.632 258.233 750.632 260.561 750.629C267.96 750.62 277.748 749.027 284.691 746.702C298.922 741.936 315.793 730.733 325.488 719.612C328.249 716.442 331.534 712.057 333.106 709.44C337.158 702.696 339.87 694.111 339.873 688.028C339.876 683.707 338.4 681.586 334.645 680.524C332.196 679.832 322.572 679.866 317.22 680.586C306.62 682.017 297.854 684.206 283.63 688.982C270.387 693.428 265.579 694.499 258.983 694.483C249.163 694.462 244.102 692.14 228.643 680.564C208.757 665.67 197.3 653.561 191.084 640.874C187.837 634.249 186.744 629.511 186.964 623.021C187.088 619.339 187.227 618.473 188.103 615.88C192.375 603.237 204.268 592.665 221.102 586.545C233.218 582.139 245.124 580.189 275.117 577.699C290.443 576.427 295.142 575.135 297.03 571.676C297.498 570.816 297.572 569.338 297.659 558.828L297.761 546.951H268.347Z" fill="#C8FF00"/>
+</svg>
+      <div class="full-mark-caption">The mark, in full</div>
+    </div>
+  </div>
+</section>
+
+<section class="rule-top">
+  <div class="wrap legacy-grid">
+    <div class="eyebrow" style="color: var(--coral);">Note 01</div>
+    <div class="legacy-copy">
+      <p>IDRVN carries <strong>over fifty years of applied arts and heritage design practice</strong> in India, including work for major hospitality and cultural institutions, into a studio shaped by <strong>a decade of architectural planning and delivery in Germany</strong>. One generation built the vocabulary. The next is translating it for buildings, brands, and archives that don't exist yet.</p>
+      <p>The studio's research method comes from <em>Vernacular Branding</em>, a study of South Asia's visual identity landscape, extended here into spatial design, brand strategy, and digital practice.</p>
+    </div>
+  </div>
+</section>
+
+<section class="rule-top">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow" style="color: var(--coral);">Sheet Index</div>
+      <h2>What we do</h2>
+    </div>
+    <div class="sheet-index">
+      <details class="sheet-row" open>
+        <summary><span class="sheet-num">A-101</span><h3>Identity &amp; brand strategy</h3><span class="sheet-plus">+</span></summary>
+        <div class="sheet-body">Visual systems built from primary research into a client's history and market, not from a template library.</div>
+      </details>
+      <details class="sheet-row">
+        <summary><span class="sheet-num">A-102</span><h3>Spatial design</h3><span class="sheet-plus">+</span></summary>
+        <div class="sheet-body">Corporate and cultural narratives translated into built space, drawing on decades of hospitality and institutional design work.</div>
+      </details>
+      <details class="sheet-row">
+        <summary><span class="sheet-num">A-103</span><h3>Design research</h3><span class="sheet-plus">+</span></summary>
+        <div class="sheet-body">Cross-cultural visual analysis and spatial archiving, continuing the methodology set out in Vernacular Branding.</div>
+      </details>
+      <details class="sheet-row">
+        <summary><span class="sheet-num">A-104</span><h3>Digital innovation</h3><span class="sheet-plus">+</span></summary>
+        <div class="sheet-body">Considered, technology-forward workflows that keep design and production connected across Nagpur and Europe.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="schedule">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Client Schedule</div>
+      <h2>Who we work with</h2>
+    </div>
+    <table class="schedule-table">
+      <thead><tr><th>Partner</th><th>What we bring</th></tr></thead>
+      <tbody>
+        <tr><td class="who">German Mittelstand &amp; premium brands</td><td>European design standards and a German-speaking director based in India.</td></tr>
+        <tr><td class="who">Indian corporates &amp; high-growth startups</td><td>Research-backed branding and spatial execution built for global attention.</td></tr>
+        <tr><td class="who">Cultural &amp; institutional grant bodies</td><td>Standalone historical, spatial, and visual research projects, built for publication and archive.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="cook rule-top">
+  <div class="wrap">
+    <div class="cook-head">
+      <h2>While the rest of this site cooks, trace the mark.</h2>
+      <p>इ is Devanagari for the short "i" sound, and the character at the center of IDRVN's wordmark. Draw over the guide, then draw your own.</p>
+    </div>
+    <div class="sketch-wrap">
+      <div class="sketch-toolbar">
+        <div class="pens">
+          <button class="pen active" data-pen="ink" aria-label="Ink pen"></button>
+          <button class="pen" data-pen="lime" aria-label="Lime pen"></button>
+          <button class="pen" data-pen="coral" aria-label="Coral pen"></button>
+        </div>
+        <div class="sketch-btns">
+          <button class="sketch-btn active" id="toggleGuide">Hide guide</button>
+          <button class="sketch-btn" id="clearPad">Clear sheet</button>
+        </div>
+      </div>
+      <div class="glyph-frame">
+        <span class="glyph-tick tl"></span><span class="glyph-tick tr"></span>
+        <span class="glyph-tick bl"></span><span class="glyph-tick br"></span>
+        <div class="glyph-guide" id="glyphGuide">इ</div>
+        <canvas id="padCanvas"></canvas>
+      </div>
+      <div class="glyph-caption">
+        <span>Script <span class="coral">Devanagari</span></span>
+        <span>Glyph इ · short i</span>
+        <span>Guide type Rozha One</span>
+      </div>
+    </div>
+    <p class="cook-caption">click / tap and drag to trace · nothing here is saved or sent anywhere</p>
+  </div>
+</section>
+
+<section class="contact rule-top" id="contact">
+  <div class="wrap contact-grid">
+    <div>
+      <h2>The studio opens in 2027. The pipeline is open now.</h2>
+      <p>IDRVN Private Limited is currently under incorporation. We're using this window to build relationships, not to trade. If your timeline points toward next year, this is the moment to talk.</p>
+      <a class="cta ghost" href="mailto:idrvn@gmail.com">Write to the studio</a>
+    </div>
+    <div class="titleblock">
+      <div class="tb-row"><span>Project</span><span>IDRVN Private Limited</span></div>
+      <div class="tb-row"><span>Location</span><span>Nagpur, Maharashtra, India</span></div>
+      <div class="tb-row"><span>Team</span><span>Kaushambi, Bhuleshwar &amp; Meenakshi Mate</span></div>
+      <div class="tb-row"><span>Status</span><span>Pre-incorporation</span></div>
+      <div class="tb-row"><span>Scale</span><span>LoI slots, Q1–Q2 2027</span></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="legal">
+  <div class="wrap">
+    <p class="legal-notice">IDRVN Private Limited is presently under incorporation in India (company i. Gr.) and is not yet a registered or operational entity. This page is a pre-launch showcase intended to introduce the studio and gather expressions of interest. It does not constitute an offer, invitation, or solicitation of business, and no commercial engagements, invoices, or payments are being processed through IDRVN at this time. Correspondence received through this site is treated as non-binding.</p>
+    <div class="legal-bottom">
+      <span><span class="coral-dot">●</span> © 2026 IDRVN. All rights reserved.</span>
+      <span>Nagpur, India</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function() {
+  var wrap = document.getElementById('compassWrap');
+  var needle = document.getElementById('needle');
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (wrap && needle && !reduceMotion) {
+    document.addEventListener('mousemove', function(e) {
+      var rect = wrap.getBoundingClientRect();
+      var cx = rect.left + rect.width / 2;
+      var cy = rect.top + rect.height / 2;
+      var angle = Math.atan2(e.clientX - cx, -(e.clientY - cy)) * (180 / Math.PI);
+      needle.style.transform = 'rotate(' + angle + 'deg)';
+    });
+  }
+
+  var canvas = document.getElementById('padCanvas');
+  if (canvas) {
+    var ctx = canvas.getContext('2d');
+    var drawing = false;
+    var last = null;
+    var penColor = getComputedStyle(document.documentElement).getPropertyValue('--ink').trim();
+
+    function resize() {
+      var ratio = window.devicePixelRatio || 1;
+      var rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * ratio;
+      canvas.height = rect.height * ratio;
+      ctx.scale(ratio, ratio);
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+    }
+    resize();
+    window.addEventListener('resize', function() {
+      var data = null;
+      try { data = canvas.toDataURL(); } catch (e) {}
+      resize();
+      if (data) {
+        var img = new Image();
+        img.onload = function() { ctx.drawImage(img, 0, 0, canvas.getBoundingClientRect().width, canvas.getBoundingClientRect().height); };
+        img.src = data;
+      }
+    });
+
+    function pos(e) {
+      var rect = canvas.getBoundingClientRect();
+      var t = e.touches ? e.touches[0] : e;
+      return { x: t.clientX - rect.left, y: t.clientY - rect.top };
+    }
+    function start(e) { drawing = true; last = pos(e); e.preventDefault(); }
+    function move(e) {
+      if (!drawing) return;
+      var p = pos(e);
+      ctx.strokeStyle = penColor;
+      ctx.lineWidth = 2.4;
+      ctx.beginPath();
+      ctx.moveTo(last.x, last.y);
+      ctx.lineTo(p.x, p.y);
+      ctx.stroke();
+      last = p;
+      e.preventDefault();
+    }
+    function end() { drawing = false; last = null; }
+
+    canvas.addEventListener('mousedown', start);
+    canvas.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', end);
+    canvas.addEventListener('touchstart', start, { passive: false });
+    canvas.addEventListener('touchmove', move, { passive: false });
+    canvas.addEventListener('touchend', end);
+
+    document.querySelectorAll('.pen').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.pen').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        var key = btn.getAttribute('data-pen');
+        penColor = getComputedStyle(document.documentElement).getPropertyValue('--' + key).trim();
+      });
+    });
+
+    var clearBtn = document.getElementById('clearPad');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', function() { ctx.clearRect(0, 0, canvas.width, canvas.height); });
+    }
+
+    var guide = document.getElementById('glyphGuide');
+    var toggleBtn = document.getElementById('toggleGuide');
+    if (guide && toggleBtn) {
+      toggleBtn.addEventListener('click', function() {
+        var hidden = guide.classList.toggle('hidden');
+        toggleBtn.textContent = hidden ? 'Show guide' : 'Hide guide';
+        toggleBtn.classList.toggle('active', !hidden);
+      });
+    }
+  }
+})();
+</script>
+
+<script>
+(function() {
+  var words = ["Innovation","Impact","Insight","Identity","Intent","Invention","Integration","Iterative","Interaction","Infrastructure"];
+  var section = document.querySelector('.wordmark-detail');
+  var introMark = document.getElementById('introMark');
+  var typeRow = document.getElementById('typeRow');
+  var typedText = document.getElementById('typedText');
+  if (!introMark) return;
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var letters = Array.from(introMark.querySelectorAll('.letter'));
+  var byKey = {};
+  letters.forEach(function(l) { byKey[l.dataset.letter] = l; });
+  var timers = [];
+  function after(ms, fn) { var t = setTimeout(fn, ms); timers.push(t); return t; }
+
+  function measureTargets(orderArr) {
+    var temp = document.createElement('div');
+    temp.style.cssText = 'position:absolute; visibility:hidden; white-space:nowrap; left:-9999px; top:-9999px;';
+    temp.style.fontFamily = getComputedStyle(introMark).fontFamily;
+    temp.style.fontSize = getComputedStyle(introMark).fontSize;
+    temp.style.letterSpacing = getComputedStyle(introMark).letterSpacing;
+    orderArr.forEach(function(k) {
+      var s = document.createElement('span');
+      s.className = 'letter';
+      s.textContent = k;
+      temp.appendChild(s);
+    });
+    document.body.appendChild(temp);
+    var rect = temp.getBoundingClientRect();
+    var out = {};
+    Array.from(temp.children).forEach(function(el, idx) {
+      var r = el.getBoundingClientRect();
+      out[orderArr[idx]] = r.left - rect.left;
+    });
+    document.body.removeChild(temp);
+    var fontSizePx = parseFloat(getComputedStyle(introMark).fontSize);
+    var extraGap = fontSizePx * 0.42;
+    orderArr.forEach(function(k, idx) { out[k] = out[k] + extraGap * idx; });
+    return out;
+  }
+
+  function runIntro(onDone) {
+    var baseRect = introMark.getBoundingClientRect();
+    var current = {};
+    letters.forEach(function(l) { current[l.dataset.letter] = l.getBoundingClientRect().left - baseRect.left; });
+    var targets = measureTargets(['I','D','R','V','N']);
+    ['D','R','I','V','N'].forEach(function(k) {
+      byKey[k].style.transform = 'translateX(' + (targets[k] - current[k]) + 'px)';
+    });
+    byKey['E'].classList.add('e-vanish');
+    after(1150, function() { after(300, onDone); });
+  }
+
+  function typeLoop() {
+    var i = 0;
+    function step() {
+      var word = words[i % words.length];
+      var chars = Array.from(word.slice(1));
+      var ci = 0;
+      function typeChar() {
+        if (ci <= chars.length) {
+          typedText.textContent = chars.slice(0, ci).join('');
+          ci++;
+          after(55, typeChar);
+        } else {
+          after(900, backspace);
+        }
+      }
+      function backspace() {
+        if (ci > 0) {
+          ci--;
+          typedText.textContent = chars.slice(0, ci).join('');
+          after(38, backspace);
+        } else {
+          i++;
+          after(350, step);
+        }
+      }
+      typeChar();
+    }
+    step();
+  }
+
+  function playAnimation() {
+    if (reduceMotion) {
+      var baseRect = introMark.getBoundingClientRect();
+      var current = {};
+      letters.forEach(function(l) { current[l.dataset.letter] = l.getBoundingClientRect().left - baseRect.left; });
+      var targets = measureTargets(['I','D','R','V','N']);
+      ['D','R','I','V','N'].forEach(function(k) { byKey[k].style.transform = 'translateX(' + (targets[k] - current[k]) + 'px)'; });
+      byKey['E'].style.display = 'none';
+      typedText.textContent = words[0].slice(1);
+      typeRow.style.transition = 'none';
+      typeRow.classList.add('show');
+      return;
+    }
+    letters.forEach(function(l) { l.style.transition = 'transform 1.15s cubic-bezier(.2,.8,.2,1), opacity 0.6s ease'; });
+    after(300, function() {
+      runIntro(function() {
+        typeRow.classList.add('show');
+        typeLoop();
+      });
+    });
+  }
+
+  if ('IntersectionObserver' in window && section) {
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          playAnimation();
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.45 });
+    observer.observe(section);
+  } else {
+    playAnimation();
+  }
+})();
+</script>
+
+<script>
+(function() {
+  var buttons = document.querySelectorAll('.fm-btn');
+  var marks = document.querySelectorAll('.full-mark-svg');
+  buttons.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var lang = btn.getAttribute('data-fm');
+      buttons.forEach(function(b) { b.classList.toggle('active', b === btn); });
+      marks.forEach(function(m) { m.classList.toggle('active', m.classList.contains('fm-' + lang)); });
+    });
+  });
+})();
+</script>
+</body>
+</html>
