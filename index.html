@@ -307,6 +307,9 @@
   .contact p { color: var(--dim); max-width: 48ch; margin: 0 0 26px; font-weight: 300; }
 
   .titleblock { border: 1px solid var(--line-dark); font-family: var(--font-body); font-size: 0.85rem; }
+  .copy-email { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.copy-email-address { font-family: var(--font-body); font-size: 0.85rem; color: var(--dim); }
+.cta.ghost[data-copied="true"] { background: var(--lime); color: var(--ink); }
   .tb-row { display: grid; grid-template-columns: 100px 1fr; border-bottom: 1px solid var(--line-dark); }
   .tb-row:last-child { border-bottom: none; }
   .tb-row span:first-child {
@@ -510,7 +513,10 @@
     <div>
       <h2>The studio opens in 2027. The pipeline is open now.</h2>
       <p>IDRVN Private Limited is currently under incorporation. We're using this window to build relationships, not to trade. If your timeline points toward next year, this is the moment to talk.</p>
-      <a class="cta ghost" href="mailto:idrvn@gmail.com">Write to the studio</a>
+      <div class="copy-email">
+  <button class="cta ghost" type="button" id="copyEmailBtn">Copy email address</button>
+  <span class="copy-email-address">idrvn@pm.de</span>
+</div>
     </div>
     <div class="titleblock">
       <div class="tb-row"><span>Project</span><span>IDRVN Private Limited</span></div>
@@ -761,6 +767,49 @@
       buttons.forEach(function(b) { b.classList.toggle('active', b === btn); });
       marks.forEach(function(m) { m.classList.toggle('active', m.classList.contains('fm-' + lang)); });
     });
+  });
+})();
+</script>
+
+<script>
+(function() {
+  var btn = document.getElementById('copyEmailBtn');
+  if (!btn) return;
+  var email = 'idrvn@pm.de';
+  var original = btn.textContent;
+  var resetTimer = null;
+
+  function showCopied() {
+    btn.textContent = 'Copied to clipboard';
+    btn.setAttribute('data-copied', 'true');
+    clearTimeout(resetTimer);
+    resetTimer = setTimeout(function() {
+      btn.textContent = original;
+      btn.removeAttribute('data-copied');
+    }, 2200);
+  }
+
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+
+  btn.addEventListener('click', function() {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(email).then(showCopied, function() {
+        fallbackCopy(email);
+        showCopied();
+      });
+    } else {
+      fallbackCopy(email);
+      showCopied();
+    }
   });
 })();
 </script>
