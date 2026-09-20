@@ -4,7 +4,9 @@ Pre-launch homepage for IDRVN Private Limited (under incorporation).
 
 ## Files
 - `index.html` — the whole site, single self-contained file
-- `favicon.svg` — the compact इ mark, used as the browser tab icon
+- `favicon.svg`, `favicon.ico`, `favicon-192.png`, `apple-touch-icon.png` — the compact इ mark as browser-tab and home-screen icons
+- `og-image.png` — 1200×630 share image used for link previews (Open Graph / Twitter)
+- `robots.txt`, `sitemap.xml` — for search engines; update the `lastmod` date in `sitemap.xml` when the page changes
 - `.nojekyll` — tells GitHub Pages to serve files as-is, skip Jekyll processing
 - `CNAME` — set to `www.idrvn.com`; delete this file if you're not pointing the domain here yet
 
