@@ -77,26 +77,42 @@
     --font-body: 'Manrope', 'Segoe UI', Helvetica, Arial, sans-serif;
     --font-deva: 'Noto Sans Devanagari', 'Nirmala UI', sans-serif;
     --font-deva-display: 'Rozha One', 'Noto Sans Devanagari', serif;
+
+    /* Page-level surface roles — these are what the Dark/Light toggle
+       actually switches. --ink/--white/--lime themselves stay fixed
+       brand colours (used as-is inside self-contained components like
+       filled buttons, the schedule "paper" panel and the sketch pad,
+       none of which change with the toggle). */
+    --bg: var(--ink);
+    --fg: var(--white);
+    --accent: var(--lime);
+    --dim2: var(--dim);
+    --line: var(--line);
   }
 
-  /* Lumina White ink/lime is the studio's fixed identity, not a UI theme —
-     it stays constant regardless of the viewer's system preference. */
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) { --ink: #08090f; --white: #ffffff; }
+  /* Ink/lime dark is the studio's default identity. Light is an explicit,
+     opt-in reading mode via the toggle in the status bar — it does not
+     follow the OS/browser colour-scheme preference. */
+  :root[data-theme="light"] {
+    --bg: var(--offwhite);
+    --fg: var(--ink);
+    --accent: var(--coral);
+    --dim2: #6b6d80;
+    --line: rgba(8,9,15,0.14);
   }
-  :root[data-theme="dark"] { --ink: #08090f; --white: #ffffff; }
 
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body {
     margin: 0;
-    background: var(--ink);
-    color: var(--white);
+    background: var(--bg);
+    color: var(--fg);
     font-family: var(--font-body);
     font-weight: 300;
     font-size: 17px;
     line-height: 1.65;
     -webkit-font-smoothing: antialiased;
+    transition: background 0.2s ease, color 0.2s ease;
   }
   a { color: inherit; }
   em { font-style: italic; }
@@ -105,8 +121,8 @@
   .grid-bg {
     position: fixed; inset: 0; z-index: 0; pointer-events: none;
     background-image:
-      linear-gradient(var(--line-dark) 1px, transparent 1px),
-      linear-gradient(90deg, var(--line-dark) 1px, transparent 1px);
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
     background-size: 42px 42px;
     opacity: 0.35;
   }
@@ -114,7 +130,7 @@
 
   .eyebrow {
     font-family: var(--font-body); font-weight: 600; font-size: 0.62rem;
-    letter-spacing: 0.2em; text-transform: uppercase; color: var(--lime);
+    letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent);
   }
   section.schedule .eyebrow { color: var(--coral); }
 
@@ -123,9 +139,9 @@
     display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px;
     font-family: var(--font-body); font-weight: 500; font-size: 0.68rem;
     letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--dim);
+    color: var(--dim2);
     padding: 10px clamp(20px, 5vw, 48px);
-    border-bottom: 1px solid var(--line-dark);
+    border-bottom: 1px solid var(--line);
   }
 
   /* ---------- header ---------- */
@@ -134,7 +150,7 @@
     padding: 22px clamp(20px, 5vw, 48px);
   }
   .wordmark { font-family: var(--font-display); font-weight: 400; font-size: 24px; letter-spacing: 0.01em; }
-  .wordmark-i { color: var(--lime); font-family: var(--font-deva-display); font-size: 1em; line-height: 1; display: inline-block; vertical-align: baseline; }
+  .wordmark-i { color: var(--accent); font-family: var(--font-deva-display); font-size: 1em; line-height: 1; display: inline-block; vertical-align: baseline; }
   .wordmark-rest { font-size: 1em; line-height: 1; display: inline-block; vertical-align: baseline; }
   .full-mark-wrap {
     display: flex; flex-direction: column; align-items: center;
@@ -142,35 +158,44 @@
   }
   .full-mark-svg { width: clamp(220px, 30vw, 360px); height: auto; display: none; }
   .full-mark-svg.active { display: block; }
-  .full-mark-switch { display: inline-flex; border: 1px solid var(--line-dark); margin-bottom: 24px; }
+  /* The logomark artwork itself is drawn for a dark ground (near-white
+     and lime fills) — it stays on a fixed dark plate regardless of the
+     page theme, the same way a logo lockup isn't redrawn per theme. */
+  .full-mark-plate {
+    background: var(--ink); width: 100%;
+    display: flex; justify-content: center;
+    padding: clamp(30px, 6vw, 56px) clamp(20px, 5vw, 40px);
+  }
+  .full-mark-switch { display: inline-flex; border: 1px solid var(--line); margin-bottom: 24px; }
   .fm-btn {
     font-family: var(--font-body); font-weight: 600; font-size: 0.64rem;
     letter-spacing: 0.08em; text-transform: uppercase;
-    background: none; border: none; color: var(--dim);
-    padding: 8px 16px; cursor: pointer; border-right: 1px solid var(--line-dark);
+    background: none; border: none; color: var(--dim2);
+    padding: 8px 16px; cursor: pointer; border-right: 1px solid var(--line);
     transition: color 0.2s ease, background 0.2s ease;
   }
   .fm-btn:last-child { border-right: none; }
   .fm-btn.active { color: var(--ink); background: var(--lime); }
-  .fm-btn:not(.active):hover { color: var(--white); }
+  .fm-btn:not(.active):hover { color: var(--fg); }
   .full-mark-caption {
     margin-top: 26px; font-family: var(--font-body); font-weight: 500;
-    font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim);
+    font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim2);
   }
-  .header-loc { font-family: var(--font-body); font-weight: 500; font-size: 0.72rem; letter-spacing: 0.06em; color: var(--dim); text-transform: uppercase; }
-  .header-loc .to { color: var(--lime); padding: 0 6px; }
+  .header-loc { font-family: var(--font-body); font-weight: 500; font-size: 0.72rem; letter-spacing: 0.06em; color: var(--dim2); text-transform: uppercase; }
+  .header-loc .to { color: var(--accent); padding: 0 6px; }
 
   /* ---------- language toggle ---------- */
-  .lang-toggle { display: inline-flex; border: 1px solid var(--line-dark); }
+  .lang-toggle { display: inline-flex; border: 1px solid var(--line); }
   .lang-btn {
     font-family: inherit; font-weight: inherit; font-size: inherit; letter-spacing: inherit;
-    text-transform: uppercase; background: none; border: none; color: var(--dim);
-    padding: 2px 9px; cursor: pointer; border-right: 1px solid var(--line-dark);
+    text-transform: uppercase; background: none; border: none; color: var(--dim2);
+    padding: 2px 9px; cursor: pointer; border-right: 1px solid var(--line);
     transition: color 0.2s ease, background 0.2s ease;
   }
   .lang-btn:last-child { border-right: none; }
   .lang-btn.active { color: var(--ink); background: var(--lime); }
-  .lang-btn:not(.active):hover { color: var(--white); }
+  .lang-btn:not(.active):hover { color: var(--fg); }
+  .toggle-group { display: flex; gap: 8px; flex-wrap: wrap; }
 
   /* ---------- hero ---------- */
   section.hero { padding: clamp(40px, 7vw, 90px) 0 clamp(70px, 9vw, 120px); }
@@ -180,7 +205,7 @@
     font-size: clamp(34px, 4.8vw, 62px); line-height: 1.12; letter-spacing: -0.01em;
     margin: 0 0 24px; max-width: 15ch;
   }
-  .hero-sub { font-size: 17px; color: var(--dim); max-width: 46ch; margin: 0 0 32px; font-weight: 300; }
+  .hero-sub { font-size: 17px; color: var(--dim2); max-width: 46ch; margin: 0 0 32px; font-weight: 300; }
   .cta {
     display: inline-flex; align-items: center; gap: 10px;
     font-family: var(--font-body); font-size: 0.85rem; font-weight: 600;
@@ -189,8 +214,8 @@
     padding: 13px 24px; border: 1px solid var(--lime);
     text-decoration: none; transition: background 0.2s ease, color 0.2s ease;
   }
-  .cta:hover { background: transparent; color: var(--lime); }
-  .cta.ghost { background: transparent; color: var(--white); border-color: var(--lime); }
+  .cta:hover { background: transparent; color: var(--accent); }
+  .cta.ghost { background: transparent; color: var(--fg); border-color: var(--accent); }
   .cta.ghost:hover { background: var(--lime); color: var(--ink); }
 
   .hero-object { position: relative; height: 320px; }
@@ -217,7 +242,7 @@
     white-space: nowrap;
   }
   #introMark .letter { display: inline-block; will-change: transform; transition: transform 1.15s cubic-bezier(.2,.8,.2,1); }
-  #introMark .letter.i-letter { color: var(--lime); }
+  #introMark .letter.i-letter { color: var(--accent); }
   #introMark .letter.e-letter { transition: transform 1.15s cubic-bezier(.2,.8,.2,1), opacity 0.6s ease; }
   #introMark .letter.e-vanish { opacity: 0; transform: translateY(-0.18em) scale(0.6) !important; }
 
@@ -232,18 +257,18 @@
     transition: opacity 0.55s ease, transform 0.55s ease;
   }
   #typeRow.show { opacity: 1; transform: translateY(0); }
-  #typeRow .i-fixed { color: var(--lime); }
-  #typeRow .typed { color: var(--white); }
+  #typeRow .i-fixed { color: var(--accent); }
+  #typeRow .typed { color: var(--fg); }
   #typeRow .cursor {
     display: inline-block; width: 0.05em; height: 0.82em;
-    background: var(--lime); margin-left: 0.02em;
+    background: var(--accent); margin-left: 0.02em;
     vertical-align: -0.04em;
     animation: blink 1s steps(1) infinite;
   }
-  #typeRow .suffix { color: var(--dim); }
+  #typeRow .suffix { color: var(--dim2); }
   @keyframes blink { 50% { opacity: 0; } }
   .wordmark-caption {
-    margin-top: 30px; font-size: 0.95rem; color: var(--dim); font-weight: 300;
+    margin-top: 30px; font-size: 0.95rem; color: var(--dim2); font-weight: 300;
     max-width: 46ch;
   }
   @media (prefers-reduced-motion: reduce) {
@@ -253,33 +278,33 @@
 
   /* ---------- section shell ---------- */
   section { padding: clamp(50px, 7vw, 90px) 0; }
-  .rule-top { border-top: 1px solid var(--line-dark); }
+  .rule-top { border-top: 1px solid var(--line); }
   .section-head { display: grid; grid-template-columns: 200px 1fr; gap: 32px; margin-bottom: 40px; }
   .section-head h2 {
     font-family: var(--font-display); font-weight: 400;
     font-size: clamp(24px, 2.6vw, 32px); margin: 0; line-height: 1.2;
   }
-  .section-head p { max-width: 58ch; color: var(--dim); margin: 0; font-weight: 300; }
+  .section-head p { max-width: 58ch; color: var(--dim2); margin: 0; font-weight: 300; }
 
   /* ---------- legacy note ---------- */
   .legacy-grid { display: grid; grid-template-columns: 200px 1fr; gap: 32px; }
-  .legacy-copy p { font-size: 18px; line-height: 1.8; max-width: 62ch; margin: 0 0 20px; color: var(--white); font-weight: 300; }
-  .legacy-copy strong { font-weight: 600; color: var(--lime); }
+  .legacy-copy p { font-size: 18px; line-height: 1.8; max-width: 62ch; margin: 0 0 20px; color: var(--fg); font-weight: 300; }
+  .legacy-copy strong { font-weight: 600; color: var(--accent); }
 
   /* ---------- sheet index (pillars) ---------- */
-  .sheet-index { border-top: 1px solid var(--line-dark); }
-  .sheet-row { border-bottom: 1px solid var(--line-dark); }
+  .sheet-index { border-top: 1px solid var(--line); }
+  .sheet-row { border-bottom: 1px solid var(--line); }
   .sheet-row summary {
     list-style: none; cursor: pointer;
     display: grid; grid-template-columns: 90px 1fr 20px; align-items: center;
     gap: 20px; padding: 20px 0;
   }
   .sheet-row summary::-webkit-details-marker { display: none; }
-  .sheet-num { font-family: var(--font-body); font-weight: 600; letter-spacing: 0.04em; color: var(--lime); font-size: 0.8rem; }
+  .sheet-num { font-family: var(--font-body); font-weight: 600; letter-spacing: 0.04em; color: var(--accent); font-size: 0.8rem; }
   .sheet-row h3 { font-family: var(--font-display); font-weight: 400; font-size: 19px; margin: 0; }
-  .sheet-plus { font-family: var(--font-body); color: var(--dim); font-size: 18px; transition: transform 0.2s ease; }
-  .sheet-row[open] .sheet-plus { transform: rotate(45deg); color: var(--lime); }
-  .sheet-body { padding: 0 0 22px 110px; color: var(--dim); max-width: 58ch; font-weight: 300; }
+  .sheet-plus { font-family: var(--font-body); color: var(--dim2); font-size: 18px; transition: transform 0.2s ease; }
+  .sheet-row[open] .sheet-plus { transform: rotate(45deg); color: var(--accent); }
+  .sheet-body { padding: 0 0 22px 110px; color: var(--dim2); max-width: 58ch; font-weight: 300; }
 
   /* ---------- schedule (segments) — paper panel ---------- */
   section.schedule { background: var(--white); color: var(--ink); }
@@ -298,7 +323,7 @@
     font-family: var(--font-display); font-weight: 400;
     font-size: clamp(22px, 3vw, 32px); margin: 0 0 10px;
   }
-  .cook-head p { color: var(--dim); margin: 0; font-weight: 300; }
+  .cook-head p { color: var(--dim2); margin: 0; font-weight: 300; }
   .sketch-wrap {
     position: relative;
     background: var(--offwhite);
@@ -353,7 +378,7 @@
     color: var(--mid); margin-top: 10px;
   }
   .glyph-caption .coral { color: var(--coral); }
-  .cook-caption { text-align: center; font-family: var(--font-body); font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--dim); margin-top: 14px; }
+  .cook-caption { text-align: center; font-family: var(--font-body); font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--dim2); margin-top: 14px; }
 
   /* ---------- contact / title block ---------- */
   .contact-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: start; }
@@ -361,24 +386,24 @@
     font-family: var(--font-display); font-weight: 400;
     font-size: clamp(26px, 3.2vw, 38px); line-height: 1.25; margin: 0 0 18px; max-width: 16ch;
   }
-  .contact p { color: var(--dim); max-width: 48ch; margin: 0 0 26px; font-weight: 300; }
+  .contact p { color: var(--dim2); max-width: 48ch; margin: 0 0 26px; font-weight: 300; }
 
-  .titleblock { border: 1px solid var(--line-dark); font-family: var(--font-body); font-size: 0.85rem; }
+  .titleblock { border: 1px solid var(--line); font-family: var(--font-body); font-size: 0.85rem; }
   .copy-email { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-  .copy-email-address { font-family: var(--font-body); font-size: 0.85rem; color: var(--dim); }
+  .copy-email-address { font-family: var(--font-body); font-size: 0.85rem; color: var(--dim2); }
   .cta.ghost[data-copied="true"] { background: var(--lime); color: var(--ink); }
-  .tb-row { display: grid; grid-template-columns: 100px 1fr; border-bottom: 1px solid var(--line-dark); }
+  .tb-row { display: grid; grid-template-columns: 100px 1fr; border-bottom: 1px solid var(--line); }
   .tb-row:last-child { border-bottom: none; }
   .tb-row span:first-child {
     padding: 10px 12px; color: var(--coral); font-weight: 600; font-size: 0.62rem;
-    letter-spacing: 0.1em; text-transform: uppercase; border-right: 1px solid var(--line-dark);
+    letter-spacing: 0.1em; text-transform: uppercase; border-right: 1px solid var(--line);
   }
-  .tb-row span:last-child { padding: 10px 12px; color: var(--white); font-weight: 300; }
+  .tb-row span:last-child { padding: 10px 12px; color: var(--fg); font-weight: 300; }
 
   /* ---------- footer ---------- */
-  footer.legal { padding: 30px clamp(20px, 5vw, 48px) 40px; border-top: 1px solid var(--line-dark); }
-  .legal-notice { font-family: var(--font-body); font-weight: 300; font-size: 0.78rem; line-height: 1.8; color: var(--dim); max-width: 82ch; margin: 0 0 16px; }
-  .legal-bottom { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-family: var(--font-body); font-weight: 500; font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--dim); }
+  footer.legal { padding: 30px clamp(20px, 5vw, 48px) 40px; border-top: 1px solid var(--line); }
+  .legal-notice { font-family: var(--font-body); font-weight: 300; font-size: 0.78rem; line-height: 1.8; color: var(--dim2); max-width: 82ch; margin: 0 0 16px; }
+  .legal-bottom { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-family: var(--font-body); font-weight: 500; font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--dim2); }
   .legal-bottom .coral-dot { color: var(--coral); }
 
   @media (max-width: 860px) {
@@ -389,7 +414,7 @@
     .contact-grid { grid-template-columns: 1fr; }
   }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
-  :focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 </style>
 </head>
 <body>
@@ -397,9 +422,15 @@
 
 <div class="statusbar">
   <span data-i18n="status.sheet">IDRVN / SHEET A-000 / COVER</span>
-  <div class="lang-toggle" id="langToggle" role="group" aria-label="Language / Sprache">
-    <button class="lang-btn active" type="button" data-lang="en" aria-pressed="true">EN</button>
-    <button class="lang-btn" type="button" data-lang="de" aria-pressed="false">DE</button>
+  <div class="toggle-group">
+    <div class="lang-toggle" id="langToggle" role="group" aria-label="Language / Sprache">
+      <button class="lang-btn active" type="button" data-lang="en" aria-pressed="true">EN</button>
+      <button class="lang-btn" type="button" data-lang="de" aria-pressed="false">DE</button>
+    </div>
+    <div class="lang-toggle" id="themeToggle" role="group" aria-label="Theme">
+      <button class="lang-btn active" type="button" data-theme-btn="dark" aria-pressed="true" data-i18n="status.dark">Dark</button>
+      <button class="lang-btn" type="button" data-theme-btn="light" aria-pressed="false" data-i18n="status.light">Light</button>
+    </div>
   </div>
   <span data-i18n="status.rev">REV 03 — FOUNDATION PHASE</span>
 </div>
@@ -421,17 +452,17 @@
       <div class="stamp" data-i18n-html="hero.stamp">DRAFT<br>NOT FOR<br>CONSTRUCTION</div>
       <div class="compass" id="compassWrap">
         <svg viewBox="0 0 240 240" fill="none">
-          <circle cx="120" cy="120" r="100" stroke="var(--dim)" stroke-width="1"/>
-          <circle cx="120" cy="120" r="60" stroke="var(--line-dark)" stroke-width="1"/>
-          <line x1="120" y1="14" x2="120" y2="34" stroke="var(--dim)" stroke-width="1"/>
-          <line x1="120" y1="206" x2="120" y2="226" stroke="var(--dim)" stroke-width="1"/>
-          <line x1="14" y1="120" x2="34" y2="120" stroke="var(--dim)" stroke-width="1"/>
-          <line x1="206" y1="120" x2="226" y2="120" stroke="var(--dim)" stroke-width="1"/>
+          <circle cx="120" cy="120" r="100" stroke="var(--dim2)" stroke-width="1"/>
+          <circle cx="120" cy="120" r="60" stroke="var(--line)" stroke-width="1"/>
+          <line x1="120" y1="14" x2="120" y2="34" stroke="var(--dim2)" stroke-width="1"/>
+          <line x1="120" y1="206" x2="120" y2="226" stroke="var(--dim2)" stroke-width="1"/>
+          <line x1="14" y1="120" x2="34" y2="120" stroke="var(--dim2)" stroke-width="1"/>
+          <line x1="206" y1="120" x2="226" y2="120" stroke="var(--dim2)" stroke-width="1"/>
           <g id="needle">
-            <line x1="120" y1="120" x2="120" y2="42" stroke="var(--lime)" stroke-width="2"/>
-            <line x1="120" y1="120" x2="120" y2="198" stroke="var(--dim)" stroke-width="1.5"/>
+            <line x1="120" y1="120" x2="120" y2="42" stroke="var(--accent)" stroke-width="2"/>
+            <line x1="120" y1="120" x2="120" y2="198" stroke="var(--dim2)" stroke-width="1.5"/>
           </g>
-          <circle cx="120" cy="120" r="4" fill="var(--lime)"/>
+          <circle cx="120" cy="120" r="4" fill="var(--accent)"/>
         </svg>
       </div>
     </div>
@@ -458,6 +489,7 @@
         <button class="fm-btn active" data-fm="hi">Hindi</button>
         <button class="fm-btn" data-fm="en" data-i18n="wordmark.fmEnglish">English</button>
       </div>
+      <div class="full-mark-plate">
       <svg class="full-mark-svg fm-hi active" viewBox="0 0 1350 1350" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fmHiTitle">
 <title id="fmHiTitle">IDRVN full logomark, Hindi: इड्रिवन</title>
 <path d="M649.258 395C657.675 397.902 664.786 402.981 670.59 410.237C676.685 417.492 679.733 427.36 679.733 439.839C679.733 452.319 675.524 462.767 667.108 471.183C658.691 479.309 645.34 483.372 627.055 483.372C608.771 483.372 580.182 478.874 541.291 469.877C502.69 460.59 477.294 455.946 465.105 455.946C445.369 455.946 435.501 463.637 435.501 479.019C435.501 490.047 439.709 498.464 448.126 504.268C456.833 510.073 466.556 512.975 477.294 512.975H533.019V521.681H489.484V756.76H428.535V521.681H385V512.975H442.466C425.633 503.978 417.216 488.886 417.216 467.7C417.216 452.028 422.585 439.259 433.324 429.391C444.063 419.233 458.139 414.155 475.553 414.155C493.257 414.155 519.669 418.508 554.787 427.215C589.905 435.921 618.348 440.274 640.116 440.274C655.788 440.274 663.625 434.905 663.625 424.167C663.625 414.3 657.82 407.334 646.211 403.271L649.258 395Z" fill="#F5F5F5"/>
@@ -476,6 +508,7 @@
 <path d="M941.943 787.13V783.605H942.295C950.754 783.605 957.567 781.021 962.736 775.852C967.906 770.683 970.49 763.869 970.49 755.41V639.811C970.49 630.883 968.61 623.952 964.851 619.018C961.327 614.083 953.691 611.616 941.943 611.616V608.092H976.834C988.817 608.092 997.98 606.8 1004.32 604.215C1010.2 601.631 1014.31 598.459 1016.66 594.699H1020.18L1020.54 644.041C1026.64 631.823 1035.93 621.955 1048.38 614.436C1060.83 606.917 1073.99 603.158 1087.85 603.158C1103.59 603.158 1116.16 608.327 1125.56 618.665C1135.2 629.003 1140.01 642.631 1140.01 659.548V755.41C1140.01 763.869 1142.6 770.683 1147.77 775.852C1152.93 781.021 1159.75 783.605 1168.21 783.605H1168.56V787.13H1061.07V783.605H1061.42C1069.88 783.605 1076.69 781.021 1081.86 775.852C1087.03 770.683 1089.61 763.869 1089.61 755.41V656.023C1089.61 644.275 1087.26 634.877 1082.56 627.828C1078.1 620.78 1072.11 617.255 1064.59 617.255C1057.31 617.255 1049.67 620.427 1041.68 626.771C1033.93 632.88 1027.11 641.221 1021.24 651.794V755.41C1021.24 763.869 1023.83 770.683 1028.99 775.852C1034.16 781.021 1040.98 783.605 1049.44 783.605H1049.79V787.13H941.943Z" fill="#F5F5F5"/>
 <path d="M268.347 546.951H209.181C195.57 546.756 190.442 546.965 185.708 545.051C180.975 543.138 181.414 544.368 172.796 536.706C168.542 532.924 165.617 530.387 161.512 526.922C159.893 525.559 157.318 523.184 155.785 521.647C154.404 520.497 153.882 518.407 153.882 517.362C153.882 516.318 154.011 515.112 155.052 514.356C156.666 513.183 159.099 512.661 162.689 512.506C162.689 512.506 348.891 512.003 351.931 512.173H406C406 512.173 381.002 533.578 364.984 547.293C375.497 547.482 349.271 547.343 364.984 547.293C360.269 547.16 342.91 546.951 342.91 546.951C339.099 546.951 337.101 548.187 336.879 550.413C336.763 551.571 336.716 559.051 336.706 569.385C336.703 577.625 336.57 586.213 336.415 588.467C335.756 598.052 332.472 603.628 325.5 607.006C320.247 609.549 313.616 610.822 297.869 612.309C288.558 613.188 277.253 614.433 272.377 615.116C261.199 616.678 250.055 619.749 243.39 623.102C234.233 627.707 227.714 635.171 225.095 644.045C223.718 648.717 223.746 656.148 225.151 659.526C225.665 660.759 227.494 661.832 229.086 661.832C231.082 661.832 234.772 660.634 244.161 656.927C263.675 649.227 271.232 647.038 283.465 645.538C293.613 644.296 306.75 645.597 316.068 648.764C327.933 652.8 339.396 660.125 350.157 670.545C357.36 677.521 363.297 684.691 366.891 690.752C368.801 693.974 371.823 700.877 372.621 703.848C374.909 712.356 374.581 722.344 371.736 730.653C367.096 744.205 355.004 758.019 337.802 769.414C326.807 776.698 311.731 783.485 298.798 786.975C297.436 787.341 296.216 787.742 296.086 787.863C295.956 787.984 298.166 790.801 301.002 794.12L312.381 807.44C319.399 815.646 321.315 817.9 325.729 823.157C337.706 837.414 341.288 841.438 349.596 849.958C352.176 852.603 351.533 851.935 356.84 857.152C357.971 858.389 367.331 865.862 370.965 868.557C389.727 882.476 407.96 889.567 430.245 891.616C435.418 892.095 448.206 891.827 452.338 891.157C461.563 889.663 468.934 886.844 476.174 882.041C479.66 879.731 485.721 873.897 488.331 870.338C491.77 865.647 494.655 858.776 495.698 852.784C496.113 850.418 496.19 848.306 496.101 842.109C495.986 834.384 495.986 834.384 499.419 836.11C512.99 842.931 522.574 854.24 526.224 867.74C526.846 870.044 526.923 871.056 526.929 877.002C526.936 882.997 526.861 883.978 526.202 886.627C522.918 899.854 514.16 910.171 500.629 916.757C484.805 924.46 465.721 925.857 443.516 920.936C419.965 915.72 398.841 904.815 373.002 884.537C363.062 876.738 357.756 872.294 348.148 863.719C346.615 862.586 327.423 844.938 322.779 840.329C318.662 836.244 311.963 829.059 303.429 819.574C297.526 813.013 292.693 807.961 284.19 799.457L276.974 792.238C276.284 791.316 275.572 791.282 270.956 791.465C259.893 791.899 244.892 790.468 235.001 788.034C227.467 786.178 219.056 783.057 213.267 779.967C209.621 778.024 203.228 773.686 200.603 771.379C189.753 761.838 183.522 748.884 184.71 738.349C185.373 732.497 187.014 728.988 190.877 725.172C193.914 722.173 196.204 720.872 200.269 719.841C203.767 718.954 210.419 719.161 214.753 720.295C223.142 722.487 232.627 727.302 239.363 732.783C241.709 734.689 252.138 744.438 255.608 747.965C258.233 750.632 258.233 750.632 260.561 750.629C267.96 750.62 277.748 749.027 284.691 746.702C298.922 741.936 315.793 730.733 325.488 719.612C328.249 716.442 331.534 712.057 333.106 709.44C337.158 702.696 339.87 694.111 339.873 688.028C339.876 683.707 338.4 681.586 334.645 680.524C332.196 679.832 322.572 679.866 317.22 680.586C306.62 682.017 297.854 684.206 283.63 688.982C270.387 693.428 265.579 694.499 258.983 694.483C249.163 694.462 244.102 692.14 228.643 680.564C208.757 665.67 197.3 653.561 191.084 640.874C187.837 634.249 186.744 629.511 186.964 623.021C187.088 619.339 187.227 618.473 188.103 615.88C192.375 603.237 204.268 592.665 221.102 586.545C233.218 582.139 245.124 580.189 275.117 577.699C290.443 576.427 295.142 575.135 297.03 571.676C297.498 570.816 297.572 569.338 297.659 558.828L297.761 546.951H268.347Z" fill="#C8FF00"/>
 </svg>
+      </div>
       <div class="full-mark-caption" data-i18n="wordmark.fullCaption">The mark, in full</div>
     </div>
   </div>
@@ -879,6 +912,8 @@
 (function() {
   var DE = {
     "status.sheet": "IDRVN / BLATT A-000 / DECKBLATT",
+    "status.dark": "Dunkel",
+    "status.light": "Hell",
     "status.rev": "REV 03 — GRÜNDUNGSPHASE",
     "header.loc1": "Telgte, Deutschland",
     "header.loc2": "Nagpur, Indien",
@@ -986,6 +1021,28 @@
   var saved = 'en';
   try { saved = localStorage.getItem('idrvn-lang') || 'en'; } catch (e) {}
   applyLang(saved === 'de' ? 'de' : 'en');
+})();
+</script>
+
+<script>
+(function() {
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    document.querySelectorAll('#themeToggle .lang-btn').forEach(function(btn) {
+      var on = btn.getAttribute('data-theme-btn') === theme;
+      btn.classList.toggle('active', on);
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    try { localStorage.setItem('idrvn-theme', theme); } catch (e) {}
+  }
+
+  document.querySelectorAll('#themeToggle .lang-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() { applyTheme(btn.getAttribute('data-theme-btn')); });
+  });
+
+  var savedTheme = 'dark';
+  try { savedTheme = localStorage.getItem('idrvn-theme') || 'dark'; } catch (e) {}
+  applyTheme(savedTheme === 'light' ? 'light' : 'dark');
 })();
 </script>
 </body>
