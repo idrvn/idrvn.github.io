@@ -206,6 +206,28 @@
     margin: 0 0 24px; max-width: 15ch;
   }
   .hero-sub { font-size: 17px; color: var(--dim2); max-width: 46ch; margin: 0 0 32px; font-weight: 300; }
+  .countdown { margin: 0 0 32px; }
+  .countdown-label {
+    display: block; font-family: var(--font-body); font-weight: 600; font-size: 0.62rem;
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--dim2); margin-bottom: 12px;
+  }
+  .countdown-nums { display: flex; gap: clamp(16px, 4vw, 30px); }
+  .countdown-unit { display: flex; flex-direction: column; align-items: flex-start; }
+  .countdown-val {
+    font-family: var(--font-display); font-weight: 400; font-size: clamp(26px, 4vw, 38px);
+    line-height: 1; color: var(--accent); font-variant-numeric: tabular-nums;
+  }
+  .countdown-unit-label {
+    margin-top: 5px; font-family: var(--font-body); font-weight: 600; font-size: 0.6rem;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim2);
+  }
+  .countdown-done-msg {
+    display: none; font-family: var(--font-display); font-weight: 400;
+    font-size: clamp(20px, 3vw, 26px); color: var(--accent); margin: 0;
+  }
+  .countdown.done .countdown-label,
+  .countdown.done .countdown-nums { display: none; }
+  .countdown.done .countdown-done-msg { display: block; }
   .cta {
     display: inline-flex; align-items: center; gap: 10px;
     font-family: var(--font-body); font-size: 0.85rem; font-weight: 600;
@@ -446,6 +468,16 @@
     <div>
       <h1 class="hero-line" data-i18n="hero.h1">A studio drawn before it's built.</h1>
       <p class="hero-sub" data-i18n="hero.sub">IDRVN is a design, spatial, and research practice opening in Nagpur in 2027, carrying fifty years of applied arts heritage and a decade of European planning strategy into one studio.</p>
+      <div class="countdown" id="countdown">
+        <span class="countdown-label" data-i18n="countdown.label">Studio opens in</span>
+        <div class="countdown-nums">
+          <div class="countdown-unit"><span class="countdown-val" id="cdDays">000</span><span class="countdown-unit-label" data-i18n="countdown.days">Days</span></div>
+          <div class="countdown-unit"><span class="countdown-val" id="cdHrs">00</span><span class="countdown-unit-label" data-i18n="countdown.hrs">Hrs</span></div>
+          <div class="countdown-unit"><span class="countdown-val" id="cdMin">00</span><span class="countdown-unit-label" data-i18n="countdown.min">Min</span></div>
+          <div class="countdown-unit"><span class="countdown-val" id="cdSec">00</span><span class="countdown-unit-label" data-i18n="countdown.sec">Sec</span></div>
+        </div>
+        <p class="countdown-done-msg" data-i18n="countdown.done">The studio is open.</p>
+      </div>
       <a class="cta" href="#contact" data-i18n="hero.cta">Start a conversation</a>
     </div>
     <div class="hero-object">
@@ -921,6 +953,12 @@
     "hero.sub": "IDRVN ist ein Design-, Raum- und Forschungsstudio, das 2027 in Nagpur eröffnet und fünfzig Jahre angewandtes Kunsthandwerk mit einem Jahrzehnt europäischer Planungsstrategie in einem Studio zusammenführt.",
     "hero.cta": "Ein Gespräch beginnen",
     "hero.stamp": "ENTWURF<br>NICHT ZUR<br>AUSFÜHRUNG",
+    "countdown.label": "Studio eröffnet in",
+    "countdown.days": "Tage",
+    "countdown.hrs": "Std",
+    "countdown.min": "Min",
+    "countdown.sec": "Sek",
+    "countdown.done": "Das Studio ist eröffnet.",
     "wordmark.eyebrow": "Detail A-001 · Wortmarke",
     "wordmark.caption": "IDRVN ist getrieben — im Namen steckt mehr, als man zunächst liest.",
     "wordmark.fmEnglish": "Englisch",
@@ -1043,6 +1081,43 @@
   var savedTheme = 'dark';
   try { savedTheme = localStorage.getItem('idrvn-theme') || 'dark'; } catch (e) {}
   applyTheme(savedTheme === 'light' ? 'light' : 'dark');
+})();
+</script>
+
+<script>
+(function() {
+  var el = document.getElementById('countdown');
+  if (!el) return;
+  var target = new Date('2027-01-01T00:00:00+05:30').getTime(); // midnight IST, Nagpur
+  var dDays = document.getElementById('cdDays');
+  var dHrs = document.getElementById('cdHrs');
+  var dMin = document.getElementById('cdMin');
+  var dSec = document.getElementById('cdSec');
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var timer = null;
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function tick() {
+    var diff = target - Date.now();
+    if (diff <= 0) {
+      el.classList.add('done');
+      if (timer) clearInterval(timer);
+      return;
+    }
+    var totalSec = Math.floor(diff / 1000);
+    var days = Math.floor(totalSec / 86400);
+    var hrs = Math.floor((totalSec % 86400) / 3600);
+    var min = Math.floor((totalSec % 3600) / 60);
+    var sec = totalSec % 60;
+    dDays.textContent = String(days).padStart(3, '0');
+    dHrs.textContent = pad(hrs);
+    dMin.textContent = pad(min);
+    dSec.textContent = pad(sec);
+  }
+
+  tick();
+  timer = setInterval(tick, reduceMotion ? 60000 : 1000);
 })();
 </script>
 </body>
