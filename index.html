@@ -160,6 +160,18 @@
   .header-loc { font-family: var(--font-body); font-weight: 500; font-size: 0.72rem; letter-spacing: 0.06em; color: var(--dim); text-transform: uppercase; }
   .header-loc .to { color: var(--lime); padding: 0 6px; }
 
+  /* ---------- language toggle ---------- */
+  .lang-toggle { display: inline-flex; border: 1px solid var(--line-dark); }
+  .lang-btn {
+    font-family: inherit; font-weight: inherit; font-size: inherit; letter-spacing: inherit;
+    text-transform: uppercase; background: none; border: none; color: var(--dim);
+    padding: 2px 9px; cursor: pointer; border-right: 1px solid var(--line-dark);
+    transition: color 0.2s ease, background 0.2s ease;
+  }
+  .lang-btn:last-child { border-right: none; }
+  .lang-btn.active { color: var(--ink); background: var(--lime); }
+  .lang-btn:not(.active):hover { color: var(--white); }
+
   /* ---------- hero ---------- */
   section.hero { padding: clamp(40px, 7vw, 90px) 0 clamp(70px, 9vw, 120px); }
   .hero-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 40px; align-items: center; }
@@ -384,25 +396,29 @@
 <div class="grid-bg"></div>
 
 <div class="statusbar">
-  <span>IDRVN / SHEET A-000 / COVER</span>
-  <span>REV 03 — FOUNDATION PHASE</span>
+  <span data-i18n="status.sheet">IDRVN / SHEET A-000 / COVER</span>
+  <div class="lang-toggle" id="langToggle" role="group" aria-label="Language / Sprache">
+    <button class="lang-btn active" type="button" data-lang="en" aria-pressed="true">EN</button>
+    <button class="lang-btn" type="button" data-lang="de" aria-pressed="false">DE</button>
+  </div>
+  <span data-i18n="status.rev">REV 03 — FOUNDATION PHASE</span>
 </div>
 
 <header class="site">
   <div class="wordmark"><span class="wordmark-i" lang="hi">इ</span><span class="wordmark-rest">drvn</span></div>
-  <div class="header-loc">Telgte, Germany <span class="to">→</span> Nagpur, India</div>
+  <div class="header-loc"><span data-i18n="header.loc1">Telgte, Germany</span> <span class="to">→</span> <span data-i18n="header.loc2">Nagpur, India</span></div>
 </header>
 
 <main>
 <section class="hero">
   <div class="wrap hero-grid">
     <div>
-      <h1 class="hero-line">A studio drawn before it's built.</h1>
-      <p class="hero-sub">IDRVN is a design, spatial, and research practice opening in Nagpur in 2027, carrying fifty years of applied arts heritage and a decade of European planning strategy into one studio.</p>
-      <a class="cta" href="#contact">Start a conversation</a>
+      <h1 class="hero-line" data-i18n="hero.h1">A studio drawn before it's built.</h1>
+      <p class="hero-sub" data-i18n="hero.sub">IDRVN is a design, spatial, and research practice opening in Nagpur in 2027, carrying fifty years of applied arts heritage and a decade of European planning strategy into one studio.</p>
+      <a class="cta" href="#contact" data-i18n="hero.cta">Start a conversation</a>
     </div>
     <div class="hero-object">
-      <div class="stamp">DRAFT<br>NOT FOR<br>CONSTRUCTION</div>
+      <div class="stamp" data-i18n-html="hero.stamp">DRAFT<br>NOT FOR<br>CONSTRUCTION</div>
       <div class="compass" id="compassWrap">
         <svg viewBox="0 0 240 240" fill="none">
           <circle cx="120" cy="120" r="100" stroke="var(--dim)" stroke-width="1"/>
@@ -424,7 +440,7 @@
 
 <section class="rule-top wordmark-detail">
   <div class="wrap">
-    <div class="eyebrow" style="color: var(--coral);">Detail A-001 · Word Mark</div>
+    <div class="eyebrow" style="color: var(--coral);" data-i18n="wordmark.eyebrow">Detail A-001 · Word Mark</div>
     <div id="introMark">
       <span class="letter" data-letter="D">D</span>
       <span class="letter" data-letter="R">R</span>
@@ -436,11 +452,11 @@
     <div id="typeRow">
       <span class="i-fixed">I</span><span class="typed" id="typedText"></span><span class="cursor"></span><span class="suffix">-Driven</span>
     </div>
-    <p class="wordmark-caption">IDRVN is driven, spelled to mean more.</p>
+    <p class="wordmark-caption" data-i18n="wordmark.caption">IDRVN is driven, spelled to mean more.</p>
     <div class="full-mark-wrap">
       <div class="full-mark-switch" id="fullMarkSwitch">
         <button class="fm-btn active" data-fm="hi">Hindi</button>
-        <button class="fm-btn" data-fm="en">English</button>
+        <button class="fm-btn" data-fm="en" data-i18n="wordmark.fmEnglish">English</button>
       </div>
       <svg class="full-mark-svg fm-hi active" viewBox="0 0 1350 1350" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fmHiTitle">
 <title id="fmHiTitle">IDRVN full logomark, Hindi: इड्रिवन</title>
@@ -460,17 +476,17 @@
 <path d="M941.943 787.13V783.605H942.295C950.754 783.605 957.567 781.021 962.736 775.852C967.906 770.683 970.49 763.869 970.49 755.41V639.811C970.49 630.883 968.61 623.952 964.851 619.018C961.327 614.083 953.691 611.616 941.943 611.616V608.092H976.834C988.817 608.092 997.98 606.8 1004.32 604.215C1010.2 601.631 1014.31 598.459 1016.66 594.699H1020.18L1020.54 644.041C1026.64 631.823 1035.93 621.955 1048.38 614.436C1060.83 606.917 1073.99 603.158 1087.85 603.158C1103.59 603.158 1116.16 608.327 1125.56 618.665C1135.2 629.003 1140.01 642.631 1140.01 659.548V755.41C1140.01 763.869 1142.6 770.683 1147.77 775.852C1152.93 781.021 1159.75 783.605 1168.21 783.605H1168.56V787.13H1061.07V783.605H1061.42C1069.88 783.605 1076.69 781.021 1081.86 775.852C1087.03 770.683 1089.61 763.869 1089.61 755.41V656.023C1089.61 644.275 1087.26 634.877 1082.56 627.828C1078.1 620.78 1072.11 617.255 1064.59 617.255C1057.31 617.255 1049.67 620.427 1041.68 626.771C1033.93 632.88 1027.11 641.221 1021.24 651.794V755.41C1021.24 763.869 1023.83 770.683 1028.99 775.852C1034.16 781.021 1040.98 783.605 1049.44 783.605H1049.79V787.13H941.943Z" fill="#F5F5F5"/>
 <path d="M268.347 546.951H209.181C195.57 546.756 190.442 546.965 185.708 545.051C180.975 543.138 181.414 544.368 172.796 536.706C168.542 532.924 165.617 530.387 161.512 526.922C159.893 525.559 157.318 523.184 155.785 521.647C154.404 520.497 153.882 518.407 153.882 517.362C153.882 516.318 154.011 515.112 155.052 514.356C156.666 513.183 159.099 512.661 162.689 512.506C162.689 512.506 348.891 512.003 351.931 512.173H406C406 512.173 381.002 533.578 364.984 547.293C375.497 547.482 349.271 547.343 364.984 547.293C360.269 547.16 342.91 546.951 342.91 546.951C339.099 546.951 337.101 548.187 336.879 550.413C336.763 551.571 336.716 559.051 336.706 569.385C336.703 577.625 336.57 586.213 336.415 588.467C335.756 598.052 332.472 603.628 325.5 607.006C320.247 609.549 313.616 610.822 297.869 612.309C288.558 613.188 277.253 614.433 272.377 615.116C261.199 616.678 250.055 619.749 243.39 623.102C234.233 627.707 227.714 635.171 225.095 644.045C223.718 648.717 223.746 656.148 225.151 659.526C225.665 660.759 227.494 661.832 229.086 661.832C231.082 661.832 234.772 660.634 244.161 656.927C263.675 649.227 271.232 647.038 283.465 645.538C293.613 644.296 306.75 645.597 316.068 648.764C327.933 652.8 339.396 660.125 350.157 670.545C357.36 677.521 363.297 684.691 366.891 690.752C368.801 693.974 371.823 700.877 372.621 703.848C374.909 712.356 374.581 722.344 371.736 730.653C367.096 744.205 355.004 758.019 337.802 769.414C326.807 776.698 311.731 783.485 298.798 786.975C297.436 787.341 296.216 787.742 296.086 787.863C295.956 787.984 298.166 790.801 301.002 794.12L312.381 807.44C319.399 815.646 321.315 817.9 325.729 823.157C337.706 837.414 341.288 841.438 349.596 849.958C352.176 852.603 351.533 851.935 356.84 857.152C357.971 858.389 367.331 865.862 370.965 868.557C389.727 882.476 407.96 889.567 430.245 891.616C435.418 892.095 448.206 891.827 452.338 891.157C461.563 889.663 468.934 886.844 476.174 882.041C479.66 879.731 485.721 873.897 488.331 870.338C491.77 865.647 494.655 858.776 495.698 852.784C496.113 850.418 496.19 848.306 496.101 842.109C495.986 834.384 495.986 834.384 499.419 836.11C512.99 842.931 522.574 854.24 526.224 867.74C526.846 870.044 526.923 871.056 526.929 877.002C526.936 882.997 526.861 883.978 526.202 886.627C522.918 899.854 514.16 910.171 500.629 916.757C484.805 924.46 465.721 925.857 443.516 920.936C419.965 915.72 398.841 904.815 373.002 884.537C363.062 876.738 357.756 872.294 348.148 863.719C346.615 862.586 327.423 844.938 322.779 840.329C318.662 836.244 311.963 829.059 303.429 819.574C297.526 813.013 292.693 807.961 284.19 799.457L276.974 792.238C276.284 791.316 275.572 791.282 270.956 791.465C259.893 791.899 244.892 790.468 235.001 788.034C227.467 786.178 219.056 783.057 213.267 779.967C209.621 778.024 203.228 773.686 200.603 771.379C189.753 761.838 183.522 748.884 184.71 738.349C185.373 732.497 187.014 728.988 190.877 725.172C193.914 722.173 196.204 720.872 200.269 719.841C203.767 718.954 210.419 719.161 214.753 720.295C223.142 722.487 232.627 727.302 239.363 732.783C241.709 734.689 252.138 744.438 255.608 747.965C258.233 750.632 258.233 750.632 260.561 750.629C267.96 750.62 277.748 749.027 284.691 746.702C298.922 741.936 315.793 730.733 325.488 719.612C328.249 716.442 331.534 712.057 333.106 709.44C337.158 702.696 339.87 694.111 339.873 688.028C339.876 683.707 338.4 681.586 334.645 680.524C332.196 679.832 322.572 679.866 317.22 680.586C306.62 682.017 297.854 684.206 283.63 688.982C270.387 693.428 265.579 694.499 258.983 694.483C249.163 694.462 244.102 692.14 228.643 680.564C208.757 665.67 197.3 653.561 191.084 640.874C187.837 634.249 186.744 629.511 186.964 623.021C187.088 619.339 187.227 618.473 188.103 615.88C192.375 603.237 204.268 592.665 221.102 586.545C233.218 582.139 245.124 580.189 275.117 577.699C290.443 576.427 295.142 575.135 297.03 571.676C297.498 570.816 297.572 569.338 297.659 558.828L297.761 546.951H268.347Z" fill="#C8FF00"/>
 </svg>
-      <div class="full-mark-caption">The mark, in full</div>
+      <div class="full-mark-caption" data-i18n="wordmark.fullCaption">The mark, in full</div>
     </div>
   </div>
 </section>
 
 <section class="rule-top">
   <div class="wrap legacy-grid">
-    <div class="eyebrow" style="color: var(--coral);">Note 01</div>
+    <div class="eyebrow" style="color: var(--coral);" data-i18n="legacy.eyebrow">Note 01</div>
     <div class="legacy-copy">
-      <p>IDRVN carries <strong>over fifty years of applied arts and heritage design practice</strong> in India, including work for major hospitality and cultural institutions, into a studio shaped by <strong>a decade of architectural planning and delivery in Germany</strong>. One generation built the vocabulary. The next is translating it for buildings, brands, and archives that don't exist yet.</p>
-      <p>The studio's research method comes from <em>Vernacular Branding</em>, a study of South Asia's visual identity landscape, extended here into spatial design, brand strategy, and digital practice.</p>
+      <p data-i18n-html="legacy.p1">IDRVN carries <strong>over fifty years of applied arts and heritage design practice</strong> in India, including work for major hospitality and cultural institutions, into a studio shaped by <strong>a decade of architectural planning and delivery in Germany</strong>. One generation built the vocabulary. The next is translating it for buildings, brands, and archives that don't exist yet.</p>
+      <p data-i18n-html="legacy.p2">The studio's research method comes from <em>Vernacular Branding</em>, a study of South Asia's visual identity landscape, extended here into spatial design, brand strategy, and digital practice.</p>
     </div>
   </div>
 </section>
@@ -478,25 +494,25 @@
 <section class="rule-top">
   <div class="wrap">
     <div class="section-head">
-      <div class="eyebrow" style="color: var(--coral);">Sheet Index</div>
-      <h2>What we do</h2>
+      <div class="eyebrow" style="color: var(--coral);" data-i18n="sheets.eyebrow">Sheet Index</div>
+      <h2 data-i18n="sheets.h2">What we do</h2>
     </div>
     <div class="sheet-index">
       <details class="sheet-row" open>
-        <summary><span class="sheet-num">A-101</span><h3>Identity &amp; brand strategy</h3><span class="sheet-plus">+</span></summary>
-        <div class="sheet-body">Visual systems built from primary research into a client's history and market, not from a template library.</div>
+        <summary><span class="sheet-num">A-101</span><h3 data-i18n="sheets.101.h">Identity &amp; brand strategy</h3><span class="sheet-plus">+</span></summary>
+        <div class="sheet-body" data-i18n="sheets.101.body">Visual systems built from primary research into a client's history and market, not from a template library.</div>
       </details>
       <details class="sheet-row">
-        <summary><span class="sheet-num">A-102</span><h3>Spatial design</h3><span class="sheet-plus">+</span></summary>
-        <div class="sheet-body">Corporate and cultural narratives translated into built space, drawing on decades of hospitality and institutional design work.</div>
+        <summary><span class="sheet-num">A-102</span><h3 data-i18n="sheets.102.h">Spatial design</h3><span class="sheet-plus">+</span></summary>
+        <div class="sheet-body" data-i18n="sheets.102.body">Corporate and cultural narratives translated into built space, drawing on decades of hospitality and institutional design work.</div>
       </details>
       <details class="sheet-row">
-        <summary><span class="sheet-num">A-103</span><h3>Design research</h3><span class="sheet-plus">+</span></summary>
-        <div class="sheet-body">Cross-cultural visual analysis and spatial archiving, continuing the methodology set out in Vernacular Branding.</div>
+        <summary><span class="sheet-num">A-103</span><h3 data-i18n="sheets.103.h">Design research</h3><span class="sheet-plus">+</span></summary>
+        <div class="sheet-body" data-i18n="sheets.103.body">Cross-cultural visual analysis and spatial archiving, continuing the methodology set out in Vernacular Branding.</div>
       </details>
       <details class="sheet-row">
-        <summary><span class="sheet-num">A-104</span><h3>Digital innovation</h3><span class="sheet-plus">+</span></summary>
-        <div class="sheet-body">Considered, technology-forward workflows that keep design and production connected across Nagpur and Europe.</div>
+        <summary><span class="sheet-num">A-104</span><h3 data-i18n="sheets.104.h">Digital innovation</h3><span class="sheet-plus">+</span></summary>
+        <div class="sheet-body" data-i18n="sheets.104.body">Considered, technology-forward workflows that keep design and production connected across Nagpur and Europe.</div>
       </details>
     </div>
   </div>
@@ -505,15 +521,15 @@
 <section class="schedule">
   <div class="wrap">
     <div class="section-head">
-      <div class="eyebrow">Client Schedule</div>
-      <h2>Who we work with</h2>
+      <div class="eyebrow" data-i18n="schedule.eyebrow">Client Schedule</div>
+      <h2 data-i18n="schedule.h2">Who we work with</h2>
     </div>
     <table class="schedule-table">
-      <thead><tr><th>Partner</th><th>What we bring</th></tr></thead>
+      <thead><tr><th data-i18n="schedule.thPartner">Partner</th><th data-i18n="schedule.thBring">What we bring</th></tr></thead>
       <tbody>
-        <tr><td class="who">German Mittelstand &amp; premium brands</td><td>European design standards and a German-speaking director based in India.</td></tr>
-        <tr><td class="who">Indian corporates &amp; high-growth startups</td><td>Research-backed branding and spatial execution built for global attention.</td></tr>
-        <tr><td class="who">Cultural &amp; institutional grant bodies</td><td>Standalone historical, spatial, and visual research projects, built for publication and archive.</td></tr>
+        <tr><td class="who" data-i18n="schedule.row1.who">German Mittelstand &amp; premium brands</td><td data-i18n="schedule.row1.what">European design standards and a German-speaking director based in India.</td></tr>
+        <tr><td class="who" data-i18n="schedule.row2.who">Indian corporates &amp; high-growth startups</td><td data-i18n="schedule.row2.what">Research-backed branding and spatial execution built for global attention.</td></tr>
+        <tr><td class="who" data-i18n="schedule.row3.who">Cultural &amp; institutional grant bodies</td><td data-i18n="schedule.row3.what">Standalone historical, spatial, and visual research projects, built for publication and archive.</td></tr>
       </tbody>
     </table>
   </div>
@@ -522,19 +538,19 @@
 <section class="cook rule-top">
   <div class="wrap">
     <div class="cook-head">
-      <h2>While the rest of this site cooks, trace the mark.</h2>
-      <p><span lang="hi">इ</span> is Devanagari for the short "i" sound, and the character at the center of IDRVN's wordmark. Draw over the guide, then draw your own.</p>
+      <h2 data-i18n="cook.h2">While the rest of this site cooks, trace the mark.</h2>
+      <p data-i18n-html="cook.p"><span lang="hi">इ</span> is Devanagari for the short "i" sound, and the character at the center of IDRVN's wordmark. Draw over the guide, then draw your own.</p>
     </div>
     <div class="sketch-wrap">
       <div class="sketch-toolbar">
         <div class="pens">
-          <button class="pen active" data-pen="ink" aria-label="Ink pen"></button>
-          <button class="pen" data-pen="lime" aria-label="Lime pen"></button>
-          <button class="pen" data-pen="coral" aria-label="Coral pen"></button>
+          <button class="pen active" data-pen="ink" aria-label="Ink pen" data-i18n-attr-aria-label="cook.penInk"></button>
+          <button class="pen" data-pen="lime" aria-label="Lime pen" data-i18n-attr-aria-label="cook.penLime"></button>
+          <button class="pen" data-pen="coral" aria-label="Coral pen" data-i18n-attr-aria-label="cook.penCoral"></button>
         </div>
         <div class="sketch-btns">
-          <button class="sketch-btn active" id="toggleGuide">Hide guide</button>
-          <button class="sketch-btn" id="clearPad">Clear sheet</button>
+          <button class="sketch-btn active" id="toggleGuide" data-i18n="cook.hideGuide">Hide guide</button>
+          <button class="sketch-btn" id="clearPad" data-i18n="cook.clearSheet">Clear sheet</button>
         </div>
       </div>
       <div class="glyph-frame">
@@ -544,31 +560,31 @@
         <canvas id="padCanvas"></canvas>
       </div>
       <div class="glyph-caption">
-        <span>Script <span class="coral">Devanagari</span></span>
-        <span>Glyph <span lang="hi">इ</span> · short i</span>
-        <span>Guide type Rozha One</span>
+        <span data-i18n-html="cook.script">Script <span class="coral">Devanagari</span></span>
+        <span data-i18n-html="cook.glyph">Glyph <span lang="hi">इ</span> · short i</span>
+        <span data-i18n="cook.guideType">Guide type Rozha One</span>
       </div>
     </div>
-    <p class="cook-caption">click / tap and drag to trace · nothing here is saved or sent anywhere</p>
+    <p class="cook-caption" data-i18n="cook.caption">click / tap and drag to trace · nothing here is saved or sent anywhere</p>
   </div>
 </section>
 
 <section class="contact rule-top" id="contact">
   <div class="wrap contact-grid">
     <div>
-      <h2>The studio opens in 2027. The pipeline is open now.</h2>
-      <p>IDRVN Private Limited is currently under incorporation. We're using this window to build relationships, not to trade. If your timeline points toward next year, this is the moment to talk.</p>
+      <h2 data-i18n="contact.h2">The studio opens in 2027. The pipeline is open now.</h2>
+      <p data-i18n="contact.p">IDRVN Private Limited is currently under incorporation. We're using this window to build relationships, not to trade. If your timeline points toward next year, this is the moment to talk.</p>
       <div class="copy-email">
-        <button class="cta ghost" type="button" id="copyEmailBtn">Copy email address</button>
+        <button class="cta ghost" type="button" id="copyEmailBtn" data-i18n="contact.copyBtn">Copy email address</button>
         <span class="copy-email-address">contact@idrvn.com</span>
       </div>
     </div>
     <div class="titleblock">
-      <div class="tb-row"><span>Project</span><span>IDRVN Private Limited</span></div>
-      <div class="tb-row"><span>Location</span><span>Nagpur, Maharashtra, India</span></div>
-      <div class="tb-row"><span>Team</span><span>Kaushambi, Bhuleshwar &amp; Meenakshi Mate</span></div>
-      <div class="tb-row"><span>Status</span><span>Pre-incorporation</span></div>
-      <div class="tb-row"><span>Scale</span><span>LoI slots, Q1–Q2 2027</span></div>
+      <div class="tb-row"><span data-i18n="contact.tbProject">Project</span><span>IDRVN Private Limited</span></div>
+      <div class="tb-row"><span data-i18n="contact.tbLocation">Location</span><span data-i18n="contact.tbLocationVal">Nagpur, Maharashtra, India</span></div>
+      <div class="tb-row"><span data-i18n="contact.tbTeam">Team</span><span>Kaushambi, Bhuleshwar &amp; Meenakshi Mate</span></div>
+      <div class="tb-row"><span data-i18n="contact.tbStatus">Status</span><span data-i18n="contact.tbStatusVal">Pre-incorporation</span></div>
+      <div class="tb-row"><span data-i18n="contact.tbScale">Scale</span><span data-i18n="contact.tbScaleVal">LoI slots, Q1–Q2 2027</span></div>
     </div>
   </div>
 </section>
@@ -576,10 +592,10 @@
 
 <footer class="legal">
   <div class="wrap">
-    <p class="legal-notice">IDRVN Private Limited is presently under incorporation in India (company i. Gr.) and is not yet a registered or operational entity. This page is a pre-launch showcase intended to introduce the studio and gather expressions of interest. It does not constitute an offer, invitation, or solicitation of business, and no commercial engagements, invoices, or payments are being processed through IDRVN at this time. Correspondence received through this site is treated as non-binding.</p>
+    <p class="legal-notice" data-i18n="footer.legal">IDRVN Private Limited is presently under incorporation in India (company i. Gr.) and is not yet a registered or operational entity. This page is a pre-launch showcase intended to introduce the studio and gather expressions of interest. It does not constitute an offer, invitation, or solicitation of business, and no commercial engagements, invoices, or payments are being processed through IDRVN at this time. Correspondence received through this site is treated as non-binding.</p>
     <div class="legal-bottom">
-      <span><span class="coral-dot">●</span> © 2026 IDRVN. All rights reserved.</span>
-      <span>Nagpur, India</span>
+      <span data-i18n-html="footer.copyright"><span class="coral-dot">●</span> © 2026 IDRVN. All rights reserved.</span>
+      <span data-i18n="footer.location">Nagpur, India</span>
     </div>
   </div>
 </footer>
@@ -673,7 +689,8 @@
     if (guide && toggleBtn) {
       toggleBtn.addEventListener('click', function() {
         var hidden = guide.classList.toggle('hidden');
-        toggleBtn.textContent = hidden ? 'Show guide' : 'Hide guide';
+        toggleBtn.setAttribute('data-i18n', hidden ? 'cook.showGuide' : 'cook.hideGuide');
+        if (window.IDRVN_applyLang) window.IDRVN_applyLang();
         toggleBtn.classList.toggle('active', !hidden);
       });
     }
@@ -821,16 +838,16 @@
   var btn = document.getElementById('copyEmailBtn');
   if (!btn) return;
   var email = 'contact@idrvn.com';
-  var original = btn.textContent;
   var resetTimer = null;
 
   function showCopied() {
-    btn.textContent = 'Copied to clipboard';
+    var lang = (window.IDRVN_currentLang && window.IDRVN_currentLang()) || 'en';
+    btn.textContent = (lang === 'de') ? 'In Zwischenablage kopiert' : 'Copied to clipboard';
     btn.setAttribute('data-copied', 'true');
     clearTimeout(resetTimer);
     resetTimer = setTimeout(function() {
-      btn.textContent = original;
       btn.removeAttribute('data-copied');
+      if (window.IDRVN_applyLang) window.IDRVN_applyLang();
     }, 2200);
   }
 
@@ -856,6 +873,121 @@
       showCopied();
     }
   });
+})();
+</script>
+
+<script>
+(function() {
+  var DE = {
+    "status.sheet": "IDRVN / BLATT A-000 / DECKBLATT",
+    "status.rev": "REV 03 — GRÜNDUNGSPHASE",
+    "header.loc1": "Telgte, Deutschland",
+    "header.loc2": "Nagpur, Indien",
+    "hero.h1": "Ein Studio, gezeichnet bevor es gebaut ist.",
+    "hero.sub": "IDRVN ist ein Design-, Raum- und Forschungsstudio, das 2027 in Nagpur eröffnet und fünfzig Jahre angewandtes Kunsthandwerk mit einem Jahrzehnt europäischer Planungsstrategie in einem Studio zusammenführt.",
+    "hero.cta": "Ein Gespräch beginnen",
+    "hero.stamp": "ENTWURF<br>NICHT ZUR<br>AUSFÜHRUNG",
+    "wordmark.eyebrow": "Detail A-001 · Wortmarke",
+    "wordmark.caption": "IDRVN ist getrieben — im Namen steckt mehr, als man zunächst liest.",
+    "wordmark.fmEnglish": "Englisch",
+    "wordmark.fullCaption": "Die Wortmarke, vollständig",
+    "legacy.eyebrow": "Notiz 01",
+    "legacy.p1": "IDRVN führt <strong>über fünfzig Jahre angewandte Kunst und Handwerkstradition</strong> in Indien — darunter Arbeiten für bedeutende Institutionen aus Hotellerie und Kultur — mit <strong>einem Jahrzehnt Architekturplanung und -umsetzung in Deutschland</strong> zusammen. Eine Generation hat das Vokabular geschaffen. Die nächste überträgt es auf Gebäude, Marken und Archive, die es noch nicht gibt.",
+    "legacy.p2": "Die Forschungsmethode des Studios stammt aus <em>Vernacular Branding</em>, einer Studie zur visuellen Identität Südasiens, die hier auf Raumdesign, Markenstrategie und digitale Praxis erweitert wird.",
+    "sheets.eyebrow": "Blattübersicht",
+    "sheets.h2": "Was wir tun",
+    "sheets.101.h": "Identität & Markenstrategie",
+    "sheets.101.body": "Visuelle Systeme, entwickelt aus eigener Recherche zu Geschichte und Markt des Kunden — nicht aus einer Vorlagenbibliothek.",
+    "sheets.102.h": "Raumgestaltung",
+    "sheets.102.body": "Unternehmens- und Kulturerzählungen, übersetzt in gebauten Raum — auf Grundlage jahrzehntelanger Erfahrung in Hotellerie- und Institutionsdesign.",
+    "sheets.103.h": "Designforschung",
+    "sheets.103.body": "Interkulturelle Bildanalyse und räumliche Archivierung, in Fortführung der in Vernacular Branding entwickelten Methodik.",
+    "sheets.104.h": "Digitale Innovation",
+    "sheets.104.body": "Durchdachte, technologieorientierte Arbeitsabläufe, die Design und Produktion zwischen Nagpur und Europa verbinden.",
+    "schedule.eyebrow": "Kundenübersicht",
+    "schedule.h2": "Mit wem wir arbeiten",
+    "schedule.thPartner": "Partner",
+    "schedule.thBring": "Was wir mitbringen",
+    "schedule.row1.who": "Deutscher Mittelstand & Premiummarken",
+    "schedule.row1.what": "Europäische Designstandards und eine deutschsprachige Studioleitung mit Sitz in Indien.",
+    "schedule.row2.who": "Indische Unternehmen & wachstumsstarke Start-ups",
+    "schedule.row2.what": "Forschungsbasiertes Branding und räumliche Umsetzung für internationale Sichtbarkeit.",
+    "schedule.row3.who": "Kultur- und Förderinstitutionen",
+    "schedule.row3.what": "Eigenständige historische, räumliche und visuelle Forschungsprojekte für Publikation und Archiv.",
+    "cook.h2": "Während der Rest dieser Seite noch entsteht: Zeichne das Zeichen nach.",
+    "cook.p": "<span lang=\"hi\">इ</span> ist Devanagari für den kurzen „i“-Laut und das Zeichen im Zentrum der IDRVN-Wortmarke. Fahre die Vorlage nach, dann zeichne es frei.",
+    "cook.penInk": "Tintenstift",
+    "cook.penLime": "Limettenstift",
+    "cook.penCoral": "Korallenstift",
+    "cook.hideGuide": "Vorlage ausblenden",
+    "cook.showGuide": "Vorlage einblenden",
+    "cook.clearSheet": "Blatt löschen",
+    "cook.script": "Schrift <span class=\"coral\">Devanagari</span>",
+    "cook.glyph": "Zeichen <span lang=\"hi\">इ</span> · kurzes i",
+    "cook.guideType": "Schriftart der Vorlage: Rozha One",
+    "cook.caption": "klicken/tippen und ziehen zum Nachzeichnen · nichts wird gespeichert oder übertragen",
+    "contact.h2": "Das Studio eröffnet 2027. Die Pipeline ist schon jetzt offen.",
+    "contact.p": "IDRVN Private Limited befindet sich derzeit in Gründung. Diese Zeit nutzen wir, um Beziehungen aufzubauen — nicht, um Geschäfte zu machen. Wenn Ihr Zeitplan auf nächstes Jahr zeigt, ist jetzt der richtige Moment für ein Gespräch.",
+    "contact.copyBtn": "E-Mail-Adresse kopieren",
+    "contact.tbProject": "Projekt",
+    "contact.tbLocation": "Standort",
+    "contact.tbLocationVal": "Nagpur, Maharashtra, Indien",
+    "contact.tbTeam": "Team",
+    "contact.tbStatus": "Status",
+    "contact.tbStatusVal": "Vorgründungsphase",
+    "contact.tbScale": "Umfang",
+    "contact.tbScaleVal": "LOI-Plätze, Q1–Q2 2027",
+    "footer.legal": "IDRVN Private Limited befindet sich derzeit in Gründung in Indien (Gesellschaft i. Gr.) und ist noch keine eingetragene oder operative Einheit. Diese Seite dient als Vorab-Präsentation, um das Studio vorzustellen und Interessensbekundungen zu sammeln. Sie stellt kein Angebot, keine Aufforderung und keine Werbung für Geschäfte dar; derzeit werden über IDRVN keine geschäftlichen Vereinbarungen, Rechnungen oder Zahlungen abgewickelt. Über diese Seite eingehende Korrespondenz gilt als unverbindlich.",
+    "footer.copyright": "<span class=\"coral-dot\">●</span> © 2026 IDRVN. Alle Rechte vorbehalten.",
+    "footer.location": "Nagpur, Indien"
+  };
+  var TITLE_DE = "IDRVN — Design-, Raum- und Forschungsstudio, Nagpur";
+
+  var textEls = Array.prototype.slice.call(document.querySelectorAll('[data-i18n]'));
+  var htmlEls = Array.prototype.slice.call(document.querySelectorAll('[data-i18n-html]'));
+  var ariaEls = Array.prototype.slice.call(document.querySelectorAll('[data-i18n-attr-aria-label]'));
+
+  var originalText = textEls.map(function(el) { return el.textContent; });
+  var originalHtml = htmlEls.map(function(el) { return el.innerHTML; });
+  var originalAria = ariaEls.map(function(el) { return el.getAttribute('aria-label'); });
+  var originalTitle = document.title;
+
+  var currentLang = 'en';
+
+  function applyLang(lang) {
+    currentLang = lang;
+    textEls.forEach(function(el, i) {
+      var key = el.getAttribute('data-i18n');
+      el.textContent = (lang === 'de' && DE[key]) ? DE[key] : originalText[i];
+    });
+    htmlEls.forEach(function(el, i) {
+      var key = el.getAttribute('data-i18n-html');
+      el.innerHTML = (lang === 'de' && DE[key]) ? DE[key] : originalHtml[i];
+    });
+    ariaEls.forEach(function(el, i) {
+      var key = el.getAttribute('data-i18n-attr-aria-label');
+      el.setAttribute('aria-label', (lang === 'de' && DE[key]) ? DE[key] : originalAria[i]);
+    });
+    document.title = (lang === 'de') ? TITLE_DE : originalTitle;
+    document.documentElement.setAttribute('lang', lang);
+    document.querySelectorAll('#langToggle .lang-btn').forEach(function(btn) {
+      var on = btn.getAttribute('data-lang') === lang;
+      btn.classList.toggle('active', on);
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    try { localStorage.setItem('idrvn-lang', lang); } catch (e) {}
+  }
+
+  window.IDRVN_applyLang = function() { applyLang(currentLang); };
+  window.IDRVN_currentLang = function() { return currentLang; };
+
+  document.querySelectorAll('#langToggle .lang-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() { applyLang(btn.getAttribute('data-lang')); });
+  });
+
+  var saved = 'en';
+  try { saved = localStorage.getItem('idrvn-lang') || 'en'; } catch (e) {}
+  applyLang(saved === 'de' ? 'de' : 'en');
 })();
 </script>
 </body>
